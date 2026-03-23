@@ -280,10 +280,53 @@ tbody tr:hover td{background:#fafafa}
       <!-- REGISTRO -->
       <div class="panel" id="panel-reg">
         <div class="ph">Registro de <em>notas</em></div>
-        <div class="ps">Todas las publicaciones · <span id="reg-n">0</span> notas</div>
+        <div class="ps">Todas las publicaciones · <span id="reg-n">0</span> notas en D1</div>
+
+        <!-- COLUMNISTAS FIJOS -->
+        <div class="card" style="margin-bottom:14px;border-left:3px solid #2980b9">
+          <div class="cardh" style="color:#2980b9">✍️ Columnistas fijos del sitio (estáticos)</div>
+          <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--gray);margin-bottom:12px">Estos 4 columnistas siempre aparecen en la sección Opinión. Son parte del diseño del sitio. Para publicar columnas adicionales, usa "Nueva nota" → tipo Columna de opinión.</p>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+            <div style="background:#f8f8f8;border:1px solid var(--lg);padding:12px;display:flex;align-items:center;gap:10px">
+              <img src="https://i.pravatar.cc/150?img=47" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0"/>
+              <div>
+                <div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700">Remedios Vargas</div>
+                <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--gray)">La Verdad Sin Anestesia</div>
+              </div>
+              <button class="btn btn-dark" onclick="pubColFija(0)" style="margin-left:auto;font-size:10px;padding:5px 10px">Publicar columna</button>
+            </div>
+            <div style="background:#f8f8f8;border:1px solid var(--lg);padding:12px;display:flex;align-items:center;gap:10px">
+              <img src="https://i.pravatar.cc/150?img=12" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0"/>
+              <div>
+                <div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700">Jorge Salcedo</div>
+                <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--gray)">El Termómetro</div>
+              </div>
+              <button class="btn btn-dark" onclick="pubColFija(1)" style="margin-left:auto;font-size:10px;padding:5px 10px">Publicar columna</button>
+            </div>
+            <div style="background:#f8f8f8;border:1px solid var(--lg);padding:12px;display:flex;align-items:center;gap:10px">
+              <img src="https://i.pravatar.cc/150?img=32" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0"/>
+              <div>
+                <div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700">Carmen Leal</div>
+                <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--gray)">Desde Abajo</div>
+              </div>
+              <button class="btn btn-dark" onclick="pubColFija(2)" style="margin-left:auto;font-size:10px;padding:5px 10px">Publicar columna</button>
+            </div>
+            <div style="background:#f8f8f8;border:1px solid var(--lg);padding:12px;display:flex;align-items:center;gap:10px">
+              <img src="https://i.pravatar.cc/150?img=25" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0"/>
+              <div>
+                <div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700">Héctor Bernal</div>
+                <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--gray)">Tu Quincena</div>
+              </div>
+              <button class="btn btn-dark" onclick="pubColFija(3)" style="margin-left:auto;font-size:10px;padding:5px 10px">Publicar columna</button>
+            </div>
+          </div>
+          <div class="msg" id="col-fija-msg" style="margin-top:10px"></div>
+        </div>
+
+        <!-- NOTAS D1 -->
         <div class="card">
           <div class="cardh">
-            <span>Notas publicadas</span>
+            <span>Notas en base de datos</span>
             <div style="display:flex;gap:8px;align-items:center">
               <select id="reg-f" onchange="loadReg()" style="border:1px solid var(--lg);padding:4px 8px;font-size:12px;font-family:'DM Sans',sans-serif">
                 <option value="">Todas las secciones</option>
@@ -683,6 +726,37 @@ async function guardarEdit(){
     if(d.ok){msg.className='msg ok';msg.textContent='✓ Guardado';setTimeout(()=>{closeModal();loadReg();loadDash();},1200);}
     else{msg.className='msg err';msg.textContent='Error: '+d.error;}
   }catch(e){msg.className='msg err';msg.textContent='Error: '+e.message;}
+}
+
+// PUBLICAR COLUMNISTA FIJO como nota en D1
+const COLS_FIJOS=[
+  {nombre:'Remedios Vargas',cargo:'Periodista independiente · 22 años en medios',columna:'La Verdad Sin Anestesia',extracto:'Cuando un político dice que investiga el caso, en realidad está midiendo cuánto tiempo tiene antes de que te olvides. Esa es la lógica del poder en México: no resolver, sino esperar que el escándalo se enfríe.\n\nEl periodismo independiente existe precisamente para no dejar que eso pase. Para recordar. Para insistir. Para no soltar el hilo aunque los reflectores se apaguen.\n\nEsa es la razón de esta columna. Aquí la verdad no negocia ni espera.'},
+  {nombre:'Jorge Salcedo',cargo:'Analista político · Ex corresponsal en Washington',columna:'El Termómetro',extracto:'México no tiene crisis de seguridad. Tiene crisis de impunidad. Son cosas distintas y resolverlas requiere soluciones distintas.\n\nUna crisis de seguridad se resuelve con más policías, más tecnología, más presupuesto. Una crisis de impunidad se resuelve con jueces independientes, fiscales autónomos y funcionarios que vayan a la cárcel cuando roban.\n\nMientras confundamos el diagnóstico, seguiremos aplicando el remedio equivocado.'},
+  {nombre:'Carmen Leal',cargo:'Corresponsal en regiones · Oaxaca, Guerrero, Chiapas',columna:'Desde Abajo',extracto:'En el rancho ya saben quién manda de verdad. Lo raro es que en la ciudad sigan fingiendo que no.\n\nLlevo quince años recorriendo comunidades en Oaxaca, Guerrero y Chiapas. En cada una, la gente sabe exactamente quién tiene el poder real: no siempre el presidente municipal, no siempre el gobernador, no siempre el gobierno federal.\n\nEl periodismo que se hace desde la capital no ve eso. Esta columna sí.'},
+  {nombre:'Héctor Bernal',cargo:'Economista · Especialista en finanzas populares',columna:'Tu Quincena',extracto:'La inflación no es un número. Es lo que sientes cuando llegas al super con quinientos pesos y sales con dos bolsas.\n\nLos economistas hablamos de porcentajes, tasas, índices. Pero la economía real se mide en si alcanza para la leche, para el gas, para los útiles de los niños.\n\nEsta columna traduce los números a lo que significan en tu vida. Sin tecnicismos, sin eufemismos.'},
+];
+
+async function pubColFija(i){
+  const c=COLS_FIJOS[i];
+  const msg=document.getElementById('col-fija-msg');
+  msg.className='msg info';msg.textContent=`Publicando columna de ${c.nombre}…`;
+  try{
+    const d=await api('/api/admin/publicar','POST',{
+      titulo:c.columna,
+      resumen:`Columna de ${c.nombre}. ${c.cargo}.`,
+      cuerpo:c.extracto,
+      categoria:'Opinión',
+      autor:c.nombre,
+      cargo:c.cargo,
+      esPrincipal:false,
+      imgUrl:'',imgSmall:''
+    });
+    if(d.ok){
+      msg.className='msg ok';msg.textContent=`✓ Columna de ${c.nombre} publicada en Opinión`;
+      loadReg();loadDash();
+    }else{msg.className='msg err';msg.textContent='Error: '+d.error;}
+  }catch(e){msg.className='msg err';msg.textContent='Error: '+e.message;}
+  setTimeout(()=>{msg.style.display='none';},5000);
 }
 
 // SISTEMA
