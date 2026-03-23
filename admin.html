@@ -7,90 +7,86 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#0f0e0d;--red:#c0392b;--red2:#a93226;--gold:#b5872a;--gray:#6b6560;--lg:#d4cfc6;--white:#fff;--paper:#f5f0e8;--green:#27ae60;--blue:#2a3a9a}
+:root{--ink:#0f0e0d;--red:#c0392b;--red2:#a93226;--gold:#b5872a;--gray:#6b6560;--lg:#d4cfc6;--white:#fff;--paper:#f5f0e8;--green:#27ae60}
 body{background:#f0f0f0;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);min-height:100vh}
-
-/* LOGIN */
-#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--ink)}
-.lbox{background:var(--white);padding:40px;width:380px;text-align:center}
+#ls{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--ink)}
+.lb{background:var(--white);padding:40px;width:380px;text-align:center}
 .llogo{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;margin-bottom:4px}
 .llogo em{color:var(--red);font-style:normal}
 .lsub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gray);margin-bottom:28px}
-.lbox input{width:100%;border:1px solid var(--lg);padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;margin-bottom:10px;background:var(--paper)}
-.lbox input:focus{outline:none;border-color:var(--red)}
+.lb input{width:100%;border:1px solid var(--lg);padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;margin-bottom:10px;background:var(--paper)}
+.lb input:focus{outline:none;border-color:var(--red)}
 .lbtn{width:100%;background:var(--red);color:var(--white);border:none;padding:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
 .lbtn:hover{background:var(--red2)}
 .lerr{color:var(--red);font-size:12px;margin-top:8px;display:none}
-.linfo{font-size:11px;color:var(--gray);margin-top:14px;line-height:1.6;border-top:1px solid var(--lg);padding-top:10px}
-
-/* ADMIN LAYOUT */
-#admin-screen{display:none}
-.topbar{background:var(--ink);color:#aaa;display:flex;align-items:center;justify-content:space-between;padding:8px 24px;font-size:12px;position:sticky;top:0;z-index:200}
-.tbrand{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--white)}
-.tbrand em{color:var(--red);font-style:normal}
-.tright{display:flex;align-items:center;gap:16px}
-.tclock{color:var(--gold);font-weight:700}
-.lout{background:none;border:1px solid #444;color:#aaa;padding:4px 10px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer}
-.lout:hover{border-color:var(--red);color:var(--red)}
-.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 42px)}
-.sidebar{background:var(--white);border-right:1px solid var(--lg);padding:14px 0;position:sticky;top:42px;height:calc(100vh - 42px);overflow-y:auto}
+.linfo{font-size:11px;color:var(--gray);margin-top:12px;border-top:1px solid var(--lg);padding-top:10px;line-height:1.6}
+#as{display:none}
+.tb{background:var(--ink);color:#aaa;display:flex;align-items:center;justify-content:space-between;padding:8px 24px;font-size:12px;position:sticky;top:0;z-index:200}
+.tbr-brand{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--white)}
+.tbr-brand em{color:var(--red);font-style:normal}
+.tbr-right{display:flex;align-items:center;gap:16px}
+.tbr-ck{color:var(--gold);font-weight:700}
+.lo{background:none;border:1px solid #444;color:#aaa;padding:4px 10px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer}
+.lo:hover{border-color:var(--red);color:var(--red)}
+.lay{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 42px)}
+.sb{background:var(--white);border-right:1px solid var(--lg);padding:14px 0;position:sticky;top:42px;height:calc(100vh - 42px);overflow-y:auto}
 .si{display:flex;align-items:center;gap:9px;padding:9px 18px;cursor:pointer;font-size:13px;color:var(--gray);transition:all .15s;border-left:3px solid transparent}
 .si:hover{background:#f8f8f8;color:var(--ink)}
 .si.active{background:#fff5f5;color:var(--red);border-left-color:var(--red);font-weight:600}
 .sisep{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--lg);padding:12px 18px 3px}
-.main{padding:22px;background:#f0f0f0;overflow-y:auto}
+.main{padding:22px;background:#f0f0f0}
 .panel{display:none}.panel.active{display:block}
 .ph{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:3px}
 .ph em{color:var(--red);font-style:normal}
 .ps{font-size:12px;color:var(--gray);margin-bottom:18px}
-
-/* STATS */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .stat{background:var(--white);border:1px solid var(--lg);padding:14px;text-align:center}
 .stn{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--red)}
 .stl{font-size:10px;color:var(--gray);letter-spacing:.07em;text-transform:uppercase;margin-top:2px}
-
-/* CARDS */
 .card{background:var(--white);border:1px solid var(--lg);padding:18px;margin-bottom:14px}
 .cardh{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gray);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-
-/* FORMS */
 .fl{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
 .fl label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray)}
 .fl input,.fl select,.fl textarea{border:1px solid var(--lg);background:var(--paper);padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);resize:vertical;width:100%}
 .fl input:focus,.fl select:focus,.fl textarea:focus{outline:none;border-color:var(--red)}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.at{display:flex;gap:14px;padding:4px 0;font-size:12px}
-.at label{display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--gray)}
-.at input{accent-color:var(--red)}
-
-/* BUTTONS */
+/* TIPO NOTA */
+.tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.tipo-opt{border:2px solid var(--lg);padding:14px;cursor:pointer;transition:all .15s;text-align:center}
+.tipo-opt:hover{border-color:var(--red)}
+.tipo-opt.selected{border-color:var(--red);background:#fff5f5}
+.tipo-ico{font-size:24px;margin-bottom:6px}
+.tipo-nm{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.tipo-ds{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--gray);line-height:1.4}
+/* PRINCIPAL BADGE */
+.badge-p{display:inline-block;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;letter-spacing:.08em;text-transform:uppercase;margin-left:6px}
+/* BOTONES */
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .btn{border:none;padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
 .btn-red{background:var(--red);color:var(--white)}.btn-red:hover{background:var(--red2)}
 .btn-dark{background:var(--ink);color:var(--gold)}.btn-dark:hover{background:#333}
-.btn-blue{background:var(--blue);color:var(--white)}.btn-blue:hover{background:#1a2a7a}
 .btn-green{background:var(--green);color:var(--white)}.btn-green:hover{background:#219150}
 .btn-gray{background:#888;color:var(--white)}.btn-gray:hover{background:#666}
 .btn-ol{background:none;border:1px solid var(--lg);color:var(--gray);padding:5px 11px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer}
 .btn-ol:hover{border-color:var(--red);color:var(--red)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
-
-/* MESSAGES */
 .msg{font-size:12px;padding:7px 12px;margin-top:8px;display:none}
 .msg.ok{background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7;display:block}
 .msg.err{background:#ffebee;color:#b71c1c;border:1px solid #ef9a9a;display:block}
 .msg.info{background:#e3f2fd;color:#0d47a1;border:1px solid #90caf9;display:block}
-
 /* IMAGEN */
 .img-tabs{display:flex;border-bottom:1px solid var(--lg);margin-bottom:10px}
 .itab{padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;color:var(--gray);border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif}
 .itab.active{color:var(--red);border-bottom-color:var(--red)}
-.img-area{border:2px dashed var(--lg);padding:8px;margin-top:6px;position:relative;background:#fafafa;min-height:60px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;font-size:12px;color:var(--gray)}
+.img-area{border:2px dashed var(--lg);padding:8px;margin-top:6px;background:#fafafa;min-height:60px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;font-size:12px;color:var(--gray)}
 .img-area img{max-width:100%;max-height:200px;object-fit:cover;display:block}
-.img-cred{font-size:10px;color:var(--gray);text-align:center;margin-top:4px}
-
+/* PROGRAMAR */
+.prog-box{background:#fff8e6;border:1px solid var(--gold);padding:14px;margin-top:14px}
+.prog-hdr{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7a5a00;margin-bottom:10px}
+.prog-slot{background:#fff8e6;border:1px solid var(--gold);padding:12px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.prog-hora{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:var(--gold);min-width:90px}
+.prog-tit{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;flex:1;line-height:1.3}
 /* TABLA */
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
@@ -98,90 +94,69 @@ thead th{background:var(--ink);color:#ccc;padding:7px 10px;text-align:left;font-
 tbody td{padding:7px 10px;border-bottom:1px solid var(--lg);vertical-align:middle}
 tbody tr:hover td{background:#fafafa}
 .cb{display:inline-block;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;text-transform:uppercase}
-.ab{background:var(--ink);color:var(--gold);font-size:9px;font-weight:700;padding:1px 5px}
-.tb{background:none;border:1px solid var(--lg);padding:3px 7px;font-size:10px;font-family:'DM Sans',sans-serif;cursor:pointer;color:var(--gray)}
-.tb:hover{border-color:var(--red);color:var(--red)}
-.tb.del:hover{background:var(--red);color:var(--white);border-color:var(--red)}
+.cbp{display:inline-block;background:#c0392b;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;text-transform:uppercase;margin-left:3px}
+.tbb{background:none;border:1px solid var(--lg);padding:3px 7px;font-size:10px;font-family:'DM Sans',sans-serif;cursor:pointer;color:var(--gray)}
+.tbb:hover{border-color:var(--red);color:var(--red)}
+.tbb.del:hover{background:var(--red);color:var(--white);border-color:var(--red)}
 .erow{text-align:center;color:var(--gray);padding:20px;font-style:italic}
-
-/* HORARIO */
-.sg{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:12px 0}
-.ss{background:#f8f8f8;border:1px solid var(--lg);padding:10px;text-align:center;cursor:pointer;transition:all .15s}
-.ss:hover{border-color:var(--red)}
-.ss.on{background:#fff5f5;border-color:var(--red)}
-.ss .sh{font-size:16px;font-weight:700;color:var(--ink)}
-.ss .st{font-size:10px;color:var(--gray);margin-top:2px}
-.ss .se{font-size:9px;font-weight:700;margin-top:4px;letter-spacing:.07em;text-transform:uppercase}
-.ss.on .se{color:var(--red)}
-
-/* PREVIEW IA */
-.prev-art{border:1px solid var(--lg);padding:14px;margin-top:10px;background:#fafafa}
-.prev-tit{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:5px}
-.prev-res{font-size:12px;color:var(--gray);font-style:italic;margin-bottom:8px}
-.prev-img{width:100%;max-height:140px;object-fit:cover;margin-bottom:8px;display:block}
-
 /* MODAL */
 .mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;align-items:center;justify-content:center}
 .mov.open{display:flex}
 .modal{background:var(--white);width:min(740px,95vw);max-height:90vh;overflow-y:auto;padding:22px}
 .mh{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
 .mc{background:none;border:none;font-size:20px;cursor:pointer;color:var(--gray)}
-
-@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{display:none}.stats{grid-template-columns:repeat(2,1fr)}.r2,.r3{grid-template-columns:1fr}.sg{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.lay{grid-template-columns:1fr}.sb{display:none}.stats{grid-template-columns:repeat(2,1fr)}.r2,.r3{grid-template-columns:1fr}.tipo-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div id="login-screen">
-  <div class="lbox">
+<div id="ls">
+  <div class="lb">
     <div class="llogo">TESTI<em>G</em>O</div>
     <div class="lsub">Panel de Redacción</div>
-    <input type="text" id="l-worker" placeholder="URL del Worker (https://...)" autocomplete="off"/>
-    <input type="password" id="l-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <input type="text" id="l-w" placeholder="URL del Worker (https://...)" autocomplete="off"/>
+    <input type="password" id="l-p" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()"/>
     <button class="lbtn" onclick="doLogin()">Entrar</button>
     <div class="lerr" id="l-err">Contraseña incorrecta o Worker no disponible</div>
-    <div class="linfo">Worker URL predeterminada:<br><strong>https://testigo-worker.vinceremx.workers.dev</strong></div>
+    <div class="linfo">Worker: <strong>https://testigo-worker.vinceremx.workers.dev</strong></div>
   </div>
 </div>
 
 <!-- ADMIN -->
-<div id="admin-screen">
-  <div class="topbar">
-    <div class="tbrand">TESTI<em>G</em>O <span style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:400;color:#555;margin-left:8px">Redacción</span></div>
-    <div class="tright">
-      <span class="tclock" id="a-clock"></span>
-      <span id="a-date" style="font-size:11px"></span>
-      <button class="lout" onclick="doLogout()">Salir</button>
+<div id="as">
+  <div class="tb">
+    <div class="tbr-brand">TESTI<em>G</em>O <span style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:400;color:#555;margin-left:8px">Redacción</span></div>
+    <div class="tbr-right">
+      <span class="tbr-ck" id="a-ck"></span>
+      <span id="a-dt" style="font-size:11px"></span>
+      <button class="lo" onclick="doLogout()">Salir</button>
     </div>
   </div>
 
-  <div class="layout">
-    <!-- SIDEBAR -->
-    <div class="sidebar">
+  <div class="lay">
+    <div class="sb">
       <div class="sisep">Principal</div>
-      <div class="si active" onclick="sp('dashboard')" data-p="dashboard">📊 Dashboard</div>
-      <div class="si" onclick="sp('publicar')" data-p="publicar">✏️ Publicar nota</div>
-      <div class="si" onclick="sp('registro')" data-p="registro">📋 Registro</div>
-      <div class="sisep">IA</div>
-      <div class="si" onclick="sp('ia')" data-p="ia">🤖 Generar con IA</div>
-      <div class="si" onclick="sp('horario')" data-p="horario">🕐 Horario</div>
+      <div class="si active" onclick="sp('dash')" data-p="dash">📊 Dashboard</div>
+      <div class="si" onclick="sp('pub')" data-p="pub">✏️ Nueva nota</div>
+      <div class="si" onclick="sp('prog')" data-p="prog">🕐 Programadas</div>
+      <div class="si" onclick="sp('reg')" data-p="reg">📋 Registro</div>
       <div class="sisep">Sistema</div>
-      <div class="si" onclick="sp('ajustes')" data-p="ajustes">⚙️ Ajustes</div>
+      <div class="si" onclick="sp('ajust')" data-p="ajust">⚙️ Ajustes</div>
       <div class="si" onclick="window.open('https://testigo.pages.dev','_blank')">🌐 Ver sitio</div>
     </div>
 
     <div class="main">
 
       <!-- DASHBOARD -->
-      <div class="panel active" id="panel-dashboard">
+      <div class="panel active" id="panel-dash">
         <div class="ph">Dashboard</div>
-        <div class="ps">Resumen del día · Ciudad de México</div>
+        <div class="ps">Resumen · Ciudad de México</div>
         <div class="stats">
-          <div class="stat"><div class="stn" id="st-total">—</div><div class="stl">Total publicaciones</div></div>
-          <div class="stat"><div class="stn" id="st-hoy">—</div><div class="stl">Publicadas hoy</div></div>
-          <div class="stat"><div class="stn" id="st-ia">—</div><div class="stl">Generadas por IA</div></div>
-          <div class="stat"><div class="stn" id="st-prox" style="font-size:18px;padding-top:5px">—</div><div class="stl">Próx. slot IA</div></div>
+          <div class="stat"><div class="stn" id="st-t">—</div><div class="stl">Total notas</div></div>
+          <div class="stat"><div class="stn" id="st-h">—</div><div class="stl">Publicadas hoy</div></div>
+          <div class="stat"><div class="stn" id="st-p">—</div><div class="stl">Principales</div></div>
+          <div class="stat"><div class="stn" id="st-pr" style="font-size:16px;padding-top:5px">—</div><div class="stl">Programadas</div></div>
         </div>
         <div class="card">
           <div class="cardh">Publicaciones recientes</div>
@@ -190,249 +165,195 @@ tbody tr:hover td{background:#fafafa}
         <div class="card" style="margin-top:12px">
           <div class="cardh">Acciones rápidas</div>
           <div class="btns">
-            <button class="btn btn-red" onclick="sp('publicar')">✏️ Nueva nota</button>
-            <button class="btn btn-dark" onclick="genRapido()">✦ Generar IA ahora</button>
+            <button class="btn btn-red" onclick="sp('pub')">✏️ Nueva nota</button>
             <button class="btn btn-green" onclick="loadDash()">↻ Actualizar</button>
           </div>
-          <div class="msg" id="dash-msg"></div>
         </div>
       </div>
 
-      <!-- PUBLICAR -->
-      <div class="panel" id="panel-publicar">
-        <div class="ph">Publicar <em>nota</em></div>
-        <div class="ps">Escribe manualmente o usa ✦ IA para que complete la nota a partir del titular</div>
-        <div class="card">
+      <!-- NUEVA NOTA -->
+      <div class="panel" id="panel-pub">
+        <div class="ph">Nueva <em>nota</em></div>
+        <div class="ps">Todo manual · Tú decides qué se publica y cuándo</div>
 
-          <div class="r2">
+        <!-- TIPO DE NOTA -->
+        <div class="card">
+          <div class="cardh">1. Tipo de nota</div>
+          <div class="tipo-grid">
+            <div class="tipo-opt selected" id="tipo-principal" onclick="setTipo('principal')">
+              <div class="tipo-ico">🗞️</div>
+              <div class="tipo-nm">Nota principal</div>
+              <div class="tipo-ds">Aparece destacada en portada y sección. Sin firma de columna.</div>
+            </div>
+            <div class="tipo-opt" id="tipo-columna" onclick="setTipo('columna')">
+              <div class="tipo-ico">✍️</div>
+              <div class="tipo-nm">Columna de opinión</div>
+              <div class="tipo-ds">Con firma del columnista. Aparece en sección Opinión y en la sección elegida.</div>
+            </div>
+          </div>
+          <div id="tip-p-info" style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--green);font-weight:600">✓ Esta nota aparecerá destacada al inicio de la portada y de su sección</div>
+          <div id="tip-c-info" style="font-family:'DM Sans',sans-serif;font-size:12px;color:#2980b9;font-weight:600;display:none">ℹ Esta nota aparecerá en Opinión con la firma del columnista</div>
+        </div>
+
+        <!-- DATOS -->
+        <div class="card">
+          <div class="cardh">2. Datos de la nota</div>
+          <div class="r3">
             <div class="fl">
               <label>Sección</label>
               <select id="p-sec">
                 <option>Nacional</option><option>Internacional</option><option>Política</option>
-                <option>Economía</option><option>Lo que no sale en TV</option>
-                <option>Cultura</option><option>Deportes</option><option>Tecnología</option>
+                <option>Seguridad</option><option>Economía</option><option>Deportes</option>
+                <option>Lo que no sale en TV</option><option>Cultura</option><option>Opinión</option>
               </select>
             </div>
             <div class="fl">
-              <label>Tipo de autor</label>
-              <div class="at">
-                <label><input type="radio" name="at" value="human" checked onchange="toggleAt(this)"> Periodista</label>
-                <label><input type="radio" name="at" value="ai" onchange="toggleAt(this)"> TestigoMX</label>
-              </div>
+              <label>Nombre del autor</label>
+              <input type="text" id="p-autor" placeholder="Nombre del periodista o columnista"/>
+            </div>
+            <div class="fl">
+              <label>Cargo (opcional)</label>
+              <input type="text" id="p-cargo" placeholder="Ej: Corresponsal política"/>
             </div>
           </div>
+          <div class="fl"><label>Titular</label><input type="text" id="p-tit" placeholder="Escribe el titular de la nota…"/></div>
+          <div class="fl"><label>Resumen / Entradilla <span style="color:var(--gray);font-weight:400;letter-spacing:0;text-transform:none">(aparece como "EN RESUMEN" en el artículo)</span></label><textarea id="p-res" rows="2" placeholder="2-3 oraciones que expliquen la noticia…"></textarea></div>
+          <div class="fl"><label>Cuerpo del artículo <span style="color:var(--gray);font-weight:400;letter-spacing:0;text-transform:none">(párrafos separados por línea en blanco · el 2do párrafo aparece como cita destacada)</span></label><textarea id="p-body" rows="10" placeholder="Escribe aquí el cuerpo completo de la nota…"></textarea></div>
+        </div>
 
-          <div class="r2" id="hrow">
-            <div class="fl"><label>Nombre del periodista</label><input type="text" id="p-autor" placeholder="Ej: Ana Martínez"/></div>
-            <div class="fl"><label>Cargo</label><input type="text" id="p-cargo" placeholder="Ej: Corresponsal política"/></div>
+        <!-- IMAGEN -->
+        <div class="card">
+          <div class="cardh">3. Imagen</div>
+          <div class="img-tabs">
+            <button class="itab active" onclick="imgTab('url',this)">🔗 Pegar URL de imagen</button>
+            <button class="itab" onclick="imgTab('file',this)">📱 Subir desde dispositivo</button>
           </div>
+          <div id="sec-url">
+            <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--gray);margin-bottom:6px">Pega la URL directa de cualquier imagen de internet (jpg, png, webp…)</div>
+            <input type="text" id="p-img-url-in" placeholder="https://…" oninput="previewUrl(this.value)" style="border:1px solid var(--lg);padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:13px;width:100%"/>
+          </div>
+          <div id="sec-file" style="display:none">
+            <input type="file" id="p-img-file" accept="image/*" onchange="onFile(this)" style="display:none"/>
+            <button class="btn btn-gray" onclick="document.getElementById('p-img-file').click()" style="margin-top:4px">📁 Elegir foto del dispositivo</button>
+            <div style="font-size:10px;color:var(--gray);margin-top:4px">JPG, PNG, WEBP · máx 4MB</div>
+          </div>
+          <div class="img-area" id="img-area" style="margin-top:10px">
+            <span id="img-ph">Sin imagen</span>
+            <img id="img-prev" src="" style="display:none;max-height:200px;width:100%;object-fit:cover"/>
+          </div>
+          <input type="hidden" id="p-img-url"/>
+          <input type="hidden" id="p-img-small"/>
+        </div>
 
-          <div class="fl">
-            <label>Titular <span style="color:var(--blue);font-size:9px;letter-spacing:.08em">· ESCRÍBELO Y USA ✦ IA PARA QUE REDACTE TODO</span></label>
-            <div style="display:flex;gap:8px">
-              <input type="text" id="p-tit" placeholder="Escribe el titular aquí…" style="flex:1"/>
-              <button class="btn btn-blue" onclick="completarConIA()" id="btn-comp">✦ IA</button>
+        <!-- PROGRAMAR -->
+        <div class="prog-box">
+          <div class="prog-hdr">🕐 Programar publicación (opcional)</div>
+          <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:#7a5a00;margin-bottom:12px">Si dejas vacío se publica <strong>ahora</strong>. Si pones fecha y hora, se guardará como programada y se publicará en ese momento automáticamente.</p>
+          <div class="r2">
+            <div class="fl" style="margin-bottom:0">
+              <label>Fecha (CDMX)</label>
+              <input type="date" id="p-fecha" style="border:1px solid #c8a500;background:#fffde7;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:13px"/>
+            </div>
+            <div class="fl" style="margin-bottom:0">
+              <label>Hora (CDMX)</label>
+              <input type="time" id="p-hora" style="border:1px solid #c8a500;background:#fffde7;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:13px"/>
             </div>
           </div>
+        </div>
 
-          <div class="fl"><label>Resumen / Entradilla</label><textarea id="p-res" rows="2" placeholder="2-3 oraciones…"></textarea></div>
-          <div class="fl"><label>Cuerpo del artículo</label><textarea id="p-body" rows="9" placeholder="Escribe el cuerpo. Separa párrafos con una línea en blanco."></textarea></div>
+        <div class="btns" style="margin-top:16px">
+          <button class="btn btn-red" onclick="publicar()" id="btn-pub">📤 Publicar</button>
+          <button class="btn btn-gray" onclick="limpiar()">🗑 Limpiar</button>
+        </div>
+        <div class="msg" id="pmsg"></div>
+      </div>
 
-          <!-- IMAGEN -->
-          <div class="fl">
-            <label>Imagen</label>
-            <div class="img-tabs">
-              <button class="itab active" onclick="imgTab('buscar',this)">🔍 Buscar en Pixabay</button>
-              <button class="itab" onclick="imgTab('dispositivo',this)">📱 Foto del dispositivo</button>
-            </div>
-
-            <div id="img-buscar">
-              <div style="display:flex;gap:8px;margin-top:4px">
-                <input type="text" id="p-img-q" placeholder="3 palabras en inglés: mexico economy protest…" style="flex:1;border:1px solid var(--lg);padding:7px 10px;font-family:'DM Sans',sans-serif;font-size:12px"/>
-                <button class="btn btn-gray" onclick="buscarImg()" id="btn-buscar-img">🔍 Buscar</button>
-              </div>
-            </div>
-
-            <div id="img-dispositivo" style="display:none;margin-top:4px">
-              <input type="file" id="p-img-file" accept="image/jpeg,image/png,image/webp" onchange="onFileSelect(this)" style="display:none"/>
-              <button class="btn btn-gray" onclick="document.getElementById('p-img-file').click()">📁 Elegir foto del dispositivo</button>
-              <div style="font-size:10px;color:var(--gray);margin-top:4px">JPG, PNG o WEBP · máx ~2MB recomendado</div>
-            </div>
-
-            <div class="img-area" id="img-area">
-              <span id="img-ph">Sin imagen seleccionada</span>
-              <img id="img-prev" src="" style="display:none"/>
-              <div class="img-cred" id="img-cred" style="display:none"></div>
-            </div>
-
-            <!-- Campos ocultos para datos de imagen -->
-            <input type="hidden" id="p-img-url"/>
-            <input type="hidden" id="p-img-small"/>
-            <input type="hidden" id="p-img-ph"/>
-            <input type="hidden" id="p-img-ph-url"/>
-          </div>
-
-          <div class="btns">
-            <button class="btn btn-red" onclick="publicar()">📤 Publicar ahora</button>
-            <button class="btn btn-gray" onclick="limpiarForm()">🗑 Limpiar todo</button>
-          </div>
-          <div class="msg" id="pmsg"></div>
+      <!-- PROGRAMADAS -->
+      <div class="panel" id="panel-prog">
+        <div class="ph">Notas <em>programadas</em></div>
+        <div class="ps">Se publican automáticamente en la hora elegida · Ciudad de México</div>
+        <div class="card">
+          <div id="prog-list"><div style="color:var(--gray);font-style:italic;font-size:13px">Sin notas programadas.</div></div>
         </div>
       </div>
 
       <!-- REGISTRO -->
-      <div class="panel" id="panel-registro">
-        <div class="ph">Registro de <em>publicaciones</em></div>
-        <div class="ps">Todas las notas guardadas en la base de datos · <span id="reg-n">0</span> publicaciones</div>
+      <div class="panel" id="panel-reg">
+        <div class="ph">Registro de <em>notas</em></div>
+        <div class="ps">Todas las publicaciones · <span id="reg-n">0</span> notas</div>
         <div class="card">
           <div class="cardh">
-            <span>Publicaciones</span>
+            <span>Notas publicadas</span>
             <div style="display:flex;gap:8px;align-items:center">
               <select id="reg-f" onchange="loadReg()" style="border:1px solid var(--lg);padding:4px 8px;font-size:12px;font-family:'DM Sans',sans-serif">
                 <option value="">Todas las secciones</option>
                 <option>Nacional</option><option>Internacional</option><option>Política</option>
-                <option>Economía</option><option>Lo que no sale en TV</option>
-                <option>Cultura</option><option>Deportes</option>
+                <option>Seguridad</option><option>Economía</option><option>Deportes</option>
+                <option>Lo que no sale en TV</option><option>Cultura</option><option>Opinión</option>
               </select>
               <button class="btn-ol" onclick="loadReg()">↻</button>
             </div>
           </div>
           <div class="tw">
             <table>
-              <thead><tr><th>#</th><th>Hora CDM</th><th>Titular</th><th>Sección</th><th>Autor</th><th>Acciones</th></tr></thead>
-              <tbody id="reg-body"><tr><td colspan="6" class="erow">Cargando…</td></tr></tbody>
+              <thead><tr><th>#</th><th>Hora CDM</th><th>Titular</th><th>Sección</th><th>Autor</th><th>Tipo</th><th>Acciones</th></tr></thead>
+              <tbody id="reg-tb"><tr><td colspan="7" class="erow">Cargando…</td></tr></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- IA -->
-      <div class="panel" id="panel-ia">
-        <div class="ph">Generar con <em>IA</em></div>
-        <div class="ps">TestigoMX genera noticias — revisa antes de publicar o publica directo</div>
-
-        <!-- VISTA PREVIA ANTES DE PUBLICAR -->
-        <div class="card">
-          <div class="cardh">✦ Vista previa — revisa antes de publicar</div>
-          <div class="r3">
-            <div class="fl"><label>Sección</label>
-              <select id="ia-sec-p">
-                <option>Nacional</option><option>Internacional</option><option>Política</option>
-                <option>Economía</option><option>Lo que no sale en TV</option><option>Cultura</option><option>Deportes</option>
-              </select>
-            </div>
-            <div class="fl"><label>Cantidad</label>
-              <select id="ia-cant-p"><option value="1">1 noticia</option><option value="3" selected>3 noticias</option><option value="5">5 noticias</option></select>
-            </div>
-            <div class="fl"><label>&nbsp;</label>
-              <button class="btn btn-blue" onclick="previewIA()" id="btn-prev">✦ Generar vista previa</button>
-            </div>
-          </div>
-          <div id="ia-prevs"></div>
-          <div class="msg" id="ia-prev-msg"></div>
-        </div>
-
-        <!-- GENERAR Y PUBLICAR DIRECTO -->
-        <div class="card" style="margin-top:12px">
-          <div class="cardh">⚡ Generar y publicar directamente (sin revisión)</div>
-          <div class="r3">
-            <div class="fl"><label>Sección</label>
-              <select id="ia-sec">
-                <option>Nacional</option><option>Internacional</option><option>Política</option>
-                <option>Economía</option><option>Lo que no sale en TV</option><option>Cultura</option><option>Deportes</option>
-              </select>
-            </div>
-            <div class="fl"><label>Cantidad</label>
-              <select id="ia-cant"><option value="1">1</option><option value="3" selected>3</option><option value="5">5</option><option value="9">9</option></select>
-            </div>
-            <div class="fl"><label>&nbsp;</label>
-              <button class="btn btn-dark" onclick="genDirecto()" id="btn-gen">✦ Generar y publicar</button>
-            </div>
-          </div>
-          <div class="msg" id="ia-msg"></div>
-        </div>
-      </div>
-
-      <!-- HORARIO -->
-      <div class="panel" id="panel-horario">
-        <div class="ph">Horario <em>automático</em></div>
-        <div class="ps">Define cuándo TestigoMX publica. Haz clic para activar/desactivar cada slot.</div>
-        <div class="card">
-          <div class="sg" id="sched-grid"></div>
-          <div class="btns">
-            <button class="btn btn-green" onclick="guardarHorario()">💾 Guardar horario</button>
-            <button class="btn btn-gray" onclick="loadHorario()">↻ Recargar</button>
-          </div>
-          <div class="msg" id="sched-msg"></div>
-        </div>
-        <div class="card" style="margin-top:12px">
-          <div class="cardh">Temas por slot (en orden)</div>
-          <div class="fl">
-            <label>Separados por coma · en el mismo orden que los slots de arriba</label>
-            <input type="text" id="temas-in" placeholder="Nacional,Economía,Internacional,Lo que no sale en TV,Política,Deportes"/>
-          </div>
-          <div class="fl"><label>Noticias por slot</label>
-            <select id="cant-slot"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="5">5</option></select>
-          </div>
-          <button class="btn btn-green" onclick="guardarTemas()">💾 Guardar</button>
-          <div class="msg" id="temas-msg"></div>
-        </div>
-      </div>
-
       <!-- AJUSTES -->
-      <div class="panel" id="panel-ajustes">
-        <div class="ph"><em>Ajustes</em> del sistema</div>
-        <div class="ps">Configuración técnica de Testigo</div>
+      <div class="panel" id="panel-ajust">
+        <div class="ph"><em>Ajustes</em></div>
+        <div class="ps">Configuración técnica del sistema</div>
         <div class="card">
-          <div class="cardh">Conexión al Worker</div>
-          <div class="fl"><label>URL del Worker activa</label>
+          <div class="cardh">Worker activo</div>
+          <div class="fl"><label>URL del Worker</label>
             <input type="text" id="cfg-w" readonly style="background:#f8f8f8;color:var(--gray)"/>
           </div>
-          <div class="fl"><label>Inicializar base de datos D1 (solo la primera vez)</label>
+          <div class="fl"><label>Inicializar D1 (primera vez o si hay error de tablas)</label>
             <button class="btn btn-dark" onclick="initDB()">⚡ Inicializar D1</button>
           </div>
           <div class="msg" id="cfg-msg"></div>
         </div>
         <div class="card" style="margin-top:12px">
-          <div class="cardh">Información del sistema</div>
-          <div style="font-size:12px;color:var(--gray);line-height:2.2">
-            <div>🗄️ Base de datos: <strong>Cloudflare D1</strong> — todos los usuarios ven lo mismo en tiempo real</div>
-            <div>🔐 Autenticación: <strong>Contraseña en Worker</strong> — solo tú tienes acceso</div>
-            <div>🤖 Motor IA: <strong>Groq LLaMA 3.3 70B</strong></div>
-            <div>🖼️ Imágenes: <strong>Pixabay</strong> — imágenes relacionadas al tema, licencia libre</div>
-            <div>⏰ Zona horaria: <strong>Ciudad de México (UTC-6)</strong></div>
-            <div>🌐 Sitio público: <a href="https://testigo.pages.dev" target="_blank" style="color:var(--red)">testigo.pages.dev</a></div>
+          <div class="cardh">Cómo funciona cada tipo de nota</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:13px;color:var(--gray);line-height:2">
+            <div>🗞️ <strong>Nota principal</strong> → aparece en portada destacada (hero) y al inicio de su sección. Siempre las más nuevas primero.</div>
+            <div>✍️ <strong>Columna de opinión</strong> → aparece en Opinión con foto del columnista. También aparece en la sección elegida.</div>
+            <div>📌 <strong>Orden</strong> → primero van las notas principales marcadas, luego las demás por fecha (más nueva primero).</div>
+            <div>🕐 <strong>Programadas</strong> → se guardan aquí en el panel y se publican automáticamente a la hora elegida mientras tengas el admin abierto.</div>
           </div>
         </div>
       </div>
 
-    </div><!-- /main -->
-  </div><!-- /layout -->
+    </div>
+  </div>
 </div>
 
 <!-- MODAL EDITAR -->
 <div class="mov" id="edit-modal">
   <div class="modal">
-    <div class="mh">
-      <span>Editar publicación</span>
-      <button class="mc" onclick="closeModal()">✕</button>
-    </div>
+    <div class="mh"><span>Editar nota</span><button class="mc" onclick="closeModal()">✕</button></div>
     <div class="fl"><label>Titular</label><input type="text" id="e-tit"/></div>
     <div class="fl"><label>Resumen</label><textarea id="e-res" rows="2"></textarea></div>
     <div class="fl"><label>Cuerpo</label><textarea id="e-body" rows="8"></textarea></div>
     <div class="r2">
       <div class="fl"><label>Sección</label>
-        <select id="e-sec">
-          <option>Nacional</option><option>Internacional</option><option>Política</option>
-          <option>Economía</option><option>Lo que no sale en TV</option><option>Cultura</option><option>Deportes</option>
-        </select>
+        <select id="e-sec"><option>Nacional</option><option>Internacional</option><option>Política</option><option>Seguridad</option><option>Economía</option><option>Deportes</option><option>Lo que no sale en TV</option><option>Cultura</option><option>Opinión</option></select>
       </div>
       <div class="fl"><label>Autor</label><input type="text" id="e-autor"/></div>
     </div>
-    <div class="fl"><label>Palabras clave imagen (inglés, opcional)</label><input type="text" id="e-img-q" placeholder="mexico economy protest…"/></div>
+    <div class="fl"><label>Es nota principal</label>
+      <div style="display:flex;align-items:center;gap:8px;padding:6px 0;font-family:'DM Sans',sans-serif;font-size:13px">
+        <input type="checkbox" id="e-principal" style="width:16px;height:16px;accent-color:var(--red)"/>
+        <label for="e-principal" style="cursor:pointer;color:var(--gray);font-size:12px;font-family:'DM Sans',sans-serif;letter-spacing:0;text-transform:none">Marcar como nota principal (aparece destacada en portada y sección)</label>
+      </div>
+    </div>
     <input type="hidden" id="e-id"/>
     <div class="btns" style="margin-top:12px">
-      <button class="btn btn-red" onclick="guardarEdit()">💾 Guardar cambios</button>
+      <button class="btn btn-red" onclick="guardarEdit()">💾 Guardar</button>
       <button class="btn btn-gray" onclick="closeModal()">Cancelar</button>
     </div>
     <div class="msg" id="edit-msg"></div>
@@ -440,576 +361,339 @@ tbody tr:hover td{background:#fafafa}
 </div>
 
 <script>
-// ═══ CONSTANTES ═══
-const DEFAULT_WORKER = "https://testigo-worker.vinceremx.workers.dev";
+const DW="https://testigo-worker.vinceremx.workers.dev";
+let WU="",TK="",tipoNota="principal";
 
-// ═══ ESTADO ═══
-let WU = "";
-let TK = "";
-
-// ═══ RELOJ MÉXICO ═══
+// RELOJ
 function mxNow(){const n=new Date();return new Date(n.getTime()+n.getTimezoneOffset()*60000-6*3600000);}
 function f12(d){let h=d.getHours(),m=d.getMinutes(),s=d.getSeconds(),ap=h<12?'AM':'PM';h=h%12||12;return`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ap}`;}
-const DS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-const MS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-function tickAdm(){
+const DS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],MS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function tickA(){
   const d=mxNow();
-  const cl=document.getElementById('a-clock');
-  const dt=document.getElementById('a-date');
-  if(cl)cl.textContent=f12(d);
+  const ck=document.getElementById('a-ck'),dt=document.getElementById('a-dt');
+  if(ck)ck.textContent=f12(d);
   if(dt)dt.textContent=`${DS[d.getDay()]} ${d.getDate()} ${MS[d.getMonth()]} ${d.getFullYear()}`;
 }
-tickAdm();setInterval(tickAdm,1000);
+tickA();setInterval(tickA,1000);
 function rel(ts){const s=(mxNow()-new Date(ts))/1000;if(s<60)return'Hace un momento';if(s<3600)return`Hace ${Math.floor(s/60)} min`;if(s<86400)return`Hace ${Math.floor(s/3600)}h`;return`Hace ${Math.floor(s/86400)} días`;}
 function exact(ts){return f12(new Date(ts));}
 
-// ═══ LOGIN ═══
+// LOGIN
 window.addEventListener('DOMContentLoaded',()=>{
-  // Pre-rellenar con datos guardados
-  const w = localStorage.getItem('tg_w') || DEFAULT_WORKER;
-  const t = localStorage.getItem('tg_t') || '';
-  document.getElementById('l-worker').value = w;
-  // Auto-login si hay token guardado
-  if(w && t){ WU=w; TK=t; verificarYEntrar(); }
+  const w=localStorage.getItem('tg_w')||DW;
+  const t=localStorage.getItem('tg_t')||'';
+  document.getElementById('l-w').value=w;
+  // Fecha de hoy por default
+  const h=mxNow();
+  const pf=document.getElementById('p-fecha');
+  if(pf)pf.value=`${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,'0')}-${String(h.getDate()).padStart(2,'0')}`;
+  if(w&&t){WU=w;TK=t;checkLogin();}
 });
 
-async function verificarYEntrar(){
+async function checkLogin(){
   try{
-    const r = await fetch(`${WU}/api/admin/lista?limit=1`, { headers:{'X-Admin-Token':TK} });
-    const d = await r.json();
-    if(r.status === 401 || d.error === 'No autorizado'){ TK=''; localStorage.removeItem('tg_t'); return; }
-    entrarAdmin();
-  }catch{ TK=''; localStorage.removeItem('tg_t'); }
+    const r=await fetch(`${WU}/api/admin/lista?limit=1`,{headers:{'X-Admin-Token':TK}});
+    if(r.status===401){TK='';localStorage.removeItem('tg_t');return;}
+    entrar();
+  }catch{TK='';localStorage.removeItem('tg_t');}
 }
 
 async function doLogin(){
-  const w = (document.getElementById('l-worker').value||'').trim() || DEFAULT_WORKER;
-  const p = (document.getElementById('l-pass').value||'').trim();
-  if(!p){ showLoginErr('Escribe la contraseña'); return; }
-  const btn = document.querySelector('.lbtn');
-  btn.textContent='Verificando…'; btn.disabled=true;
+  const w=(document.getElementById('l-w').value||'').trim()||DW;
+  const p=(document.getElementById('l-p').value||'').trim();
+  if(!p){showErr('Escribe la contraseña');return;}
+  const btn=document.querySelector('.lbtn');btn.textContent='Verificando…';btn.disabled=true;
   try{
-    const r = await fetch(`${w}/api/admin/lista?limit=1`, { headers:{'Content-Type':'application/json','X-Admin-Token':p} });
-    const d = await r.json();
-    if(r.status===401 || d.error==='No autorizado'){ showLoginErr('Contraseña incorrecta'); }
-    else{ WU=w; TK=p; localStorage.setItem('tg_w',w); localStorage.setItem('tg_t',p); entrarAdmin(); }
-  }catch(e){ showLoginErr('No se pudo conectar al Worker'); }
-  btn.textContent='Entrar'; btn.disabled=false;
+    const r=await fetch(`${w}/api/admin/lista?limit=1`,{headers:{'Content-Type':'application/json','X-Admin-Token':p}});
+    const d=await r.json();
+    if(r.status===401||d.error==='No autorizado'){showErr('Contraseña incorrecta');}
+    else{WU=w;TK=p;localStorage.setItem('tg_w',w);localStorage.setItem('tg_t',p);entrar();}
+  }catch{showErr('No se pudo conectar al Worker');}
+  btn.textContent='Entrar';btn.disabled=false;
 }
-
-function showLoginErr(msg){
-  const e = document.getElementById('l-err');
-  e.textContent = msg || 'Error';
-  e.style.display='block';
-  setTimeout(()=>e.style.display='none', 3500);
-}
-
-function entrarAdmin(){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('admin-screen').style.display='block';
-  document.getElementById('cfg-w').value = WU;
-  // Solo cargamos dashboard al entrar; el resto se carga bajo demanda
+function showErr(m){const e=document.getElementById('l-err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',3500);}
+function entrar(){
+  document.getElementById('ls').style.display='none';
+  document.getElementById('as').style.display='block';
+  document.getElementById('cfg-w').value=WU;
   loadDash();
+  startAutoPublish();
+}
+function doLogout(){TK='';localStorage.removeItem('tg_t');document.getElementById('ls').style.display='flex';document.getElementById('as').style.display='none';document.getElementById('l-p').value='';}
+
+// API
+async function api(path,method='GET',body=null){
+  const opts={method,headers:{'Content-Type':'application/json','X-Admin-Token':TK}};
+  if(body)opts.body=JSON.stringify(body);
+  return (await fetch(WU+path,opts)).json();
 }
 
-function doLogout(){
-  TK=''; localStorage.removeItem('tg_t');
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('admin-screen').style.display='none';
-  document.getElementById('l-pass').value='';
-}
-
-// ═══ API helper ═══
-async function api(path, method='GET', body=null){
-  const opts = { method, headers:{'Content-Type':'application/json','X-Admin-Token':TK} };
-  if(body) opts.body = JSON.stringify(body);
-  const r = await fetch(WU + path, opts);
-  return r.json();
-}
-
-// ═══ NAVEGACIÓN ═══
+// NAV
 function sp(id){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.si').forEach(s=>s.classList.remove('active'));
-  const panel = document.getElementById('panel-'+id);
-  const nav   = document.querySelector(`[data-p="${id}"]`);
-  if(panel) panel.classList.add('active');
-  if(nav)   nav.classList.add('active');
-  // Cargar datos según panel
-  if(id==='dashboard') loadDash();
-  if(id==='registro')  loadReg();
-  if(id==='horario')   loadHorario();
+  document.getElementById('panel-'+id)?.classList.add('active');
+  document.querySelector(`[data-p="${id}"]`)?.classList.add('active');
+  if(id==='dash')loadDash();
+  if(id==='reg')loadReg();
+  if(id==='prog')loadProg();
 }
 
-// ═══ DASHBOARD ═══
+// DASHBOARD
 async function loadDash(){
   try{
-    const d = await api('/api/admin/lista?limit=200');
-    const arts = d.articulos || [];
-    const hoy = mxNow().toDateString();
-    const hoyN = arts.filter(a => new Date(a.timestamp).toDateString()===hoy).length;
-    const iaN  = arts.filter(a => a.es_ia).length;
-    document.getElementById('st-total').textContent = arts.length;
-    document.getElementById('st-hoy').textContent   = hoyN;
-    document.getElementById('st-ia').textContent    = iaN;
-    const hm = `${String(mxNow().getHours()).padStart(2,'0')}:${String(mxNow().getMinutes()).padStart(2,'0')}`;
-    document.getElementById('st-prox').textContent  = sigSlot(hm);
-
-    const rec = arts.slice(0,8);
-    document.getElementById('dash-rec').innerHTML = rec.length
-      ? rec.map(a=>`
-          <div style="display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--lg)">
-            <span class="cb">${a.categoria}</span>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.titulo}</div>
-              <div style="font-size:11px;color:var(--gray)">${a.es_ia?'<span class="ab">TestigoMX</span>':a.autor} · ${rel(a.timestamp)}</div>
-            </div>
-            <div style="display:flex;gap:5px;flex-shrink:0">
-              <button class="tb" onclick="abrirEdit(${a.id})">Editar</button>
-              <button class="tb del" onclick="eliminar(${a.id})">✕</button>
-            </div>
-          </div>`).join('')
-      : '<div style="color:var(--gray);font-style:italic;font-size:13px;padding:12px 0">Sin publicaciones aún. Genera algunas con IA o escribe la primera nota.</div>';
-  }catch(e){ console.error('loadDash:', e); }
+    const d=await api('/api/admin/lista?limit=200');
+    const arts=d.articulos||[];
+    const hoy=mxNow().toDateString();
+    const hoyN=arts.filter(a=>new Date(a.timestamp).toDateString()===hoy).length;
+    const pN=arts.filter(a=>a.es_principal).length;
+    const prog=getProg();
+    document.getElementById('st-t').textContent=arts.length;
+    document.getElementById('st-h').textContent=hoyN;
+    document.getElementById('st-p').textContent=pN;
+    document.getElementById('st-pr').textContent=prog.length;
+    const rec=arts.slice(0,10);
+    document.getElementById('dash-rec').innerHTML=rec.length
+      ?rec.map(a=>`
+        <div style="display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--lg)">
+          <span class="cb">${a.categoria}</span>
+          ${a.es_principal?'<span class="cbp">P</span>':''}
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.titulo}</div>
+            <div style="font-size:11px;color:var(--gray)">${a.autor||'Redacción'} · ${rel(a.timestamp)}</div>
+          </div>
+          <div style="display:flex;gap:5px;flex-shrink:0">
+            <button class="tbb" onclick="abrirEdit(${a.id})">Editar</button>
+            <button class="tbb del" onclick="eliminar(${a.id})">✕</button>
+          </div>
+        </div>`).join('')
+      :'<div style="color:var(--gray);font-style:italic;font-size:13px;padding:10px 0">Sin publicaciones aún. ¡Publica tu primera nota!</div>';
+  }catch(e){console.error(e);}
 }
 
-function sigSlot(hm){
-  const slots=['07:00','10:00','13:00','16:00','19:00','22:00'];
-  return slots.find(x=>x>hm) || '07:00 mañana';
+// TIPO NOTA
+function setTipo(t){
+  tipoNota=t;
+  document.getElementById('tipo-principal').classList.toggle('selected',t==='principal');
+  document.getElementById('tipo-columna').classList.toggle('selected',t==='columna');
+  document.getElementById('tip-p-info').style.display=t==='principal'?'block':'none';
+  document.getElementById('tip-c-info').style.display=t==='columna'?'block':'none';
 }
 
-async function genRapido(){
-  const msg = document.getElementById('dash-msg');
-  msg.className='msg info'; msg.textContent='Generando…';
-  try{
-    const d = await api('/api/admin/generar','POST',{seccion:'Nacional',cantidad:3});
-    if(d.ok){ msg.className='msg ok'; msg.textContent=`✓ ${d.articulos?.length||3} noticias publicadas.`; loadDash(); }
-    else{ msg.className='msg err'; msg.textContent='Error: '+(d.error||'desconocido'); }
-  }catch(e){ msg.className='msg err'; msg.textContent='Error: '+e.message; }
-  setTimeout(()=>{ msg.style.display='none'; }, 6000);
+// IMAGEN
+function imgTab(tab,el){
+  document.querySelectorAll('.itab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  document.getElementById('sec-url').style.display=tab==='url'?'block':'none';
+  document.getElementById('sec-file').style.display=tab==='file'?'block':'none';
 }
-
-// ═══ FORM PUBLICAR ═══
-function toggleAt(el){
-  document.getElementById('hrow').style.display = el.value==='human' ? 'grid' : 'none';
-}
-
-function limpiarForm(){
-  ['p-tit','p-res','p-body','p-img-q','p-img-url','p-img-small','p-img-ph','p-img-ph-url'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.value = '';
-  });
-  resetImgPreview();
-  const msg = document.getElementById('pmsg');
-  if(msg) msg.style.display='none';
-}
-
-function resetImgPreview(){
-  document.getElementById('img-ph').style.display='block';
-  const prev = document.getElementById('img-prev');
-  prev.style.display='none'; prev.src='';
-  document.getElementById('img-cred').style.display='none';
-}
-
-// ── IMAGEN ──
-function imgTab(tab, el){
-  document.querySelectorAll('.itab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('img-buscar').style.display    = tab==='buscar'     ? 'block' : 'none';
-  document.getElementById('img-dispositivo').style.display = tab==='dispositivo' ? 'block' : 'none';
-}
-
-async function buscarImg(){
-  const q = document.getElementById('p-img-q').value.trim();
-  if(!q){ alert('Escribe palabras clave para buscar la imagen'); return; }
-  const btn = document.getElementById('btn-buscar-img');
-  btn.disabled=true; btn.textContent='Buscando…';
-  try{
-    // Buscar via Worker (usa Pixabay)
-    const d = await api('/api/admin/imagen','POST',{query:q});
-    if(d.ok && d.img && d.img.url){
-      setImgPreview(d.img.url, d.img.small||d.img.url, d.img.photographer||'Pixabay', d.img.photographer_url||'https://pixabay.com');
-    } else {
-      // Fallback: Picsum con seed del query
-      const seed=Math.abs(q.split('').reduce((a,c)=>(a*31+c.charCodeAt(0))|0,0))%900+100;
-      setImgPreview(`https://picsum.photos/seed/${seed}/800/500`,`https://picsum.photos/seed/${seed}/400/250`,'Imagen ilustrativa','https://picsum.photos');
-    }
-  }catch{
-    const seed=Math.abs(q.split('').reduce((a,c)=>(a*31+c.charCodeAt(0))|0,0))%900+100;
-    setImgPreview(`https://picsum.photos/seed/${seed}/800/500`,`https://picsum.photos/seed/${seed}/400/250`,'Imagen ilustrativa','https://picsum.photos');
+function previewUrl(url){
+  const prev=document.getElementById('img-prev'),ph=document.getElementById('img-ph');
+  if(url&&(url.startsWith('http')||url.startsWith('data:'))){
+    document.getElementById('p-img-url').value=url;
+    document.getElementById('p-img-small').value=url;
+    prev.src=url;prev.style.display='block';ph.style.display='none';
+  }else{
+    prev.style.display='none';ph.style.display='block';
+    document.getElementById('p-img-url').value='';
   }
-  btn.disabled=false; btn.textContent='🔍 Buscar';
 }
-
-function setImgPreview(url, small, ph, phUrl){
-  document.getElementById('p-img-url').value   = url;
-  document.getElementById('p-img-small').value = small || url;
-  document.getElementById('p-img-ph').value    = ph || '';
-  document.getElementById('p-img-ph-url').value= phUrl || '';
-  const prev = document.getElementById('img-prev');
-  prev.src = url; prev.style.display='block';
-  document.getElementById('img-ph').style.display='none';
-  const cred = document.getElementById('img-cred');
-  cred.textContent = `📷 ${ph||'Unsplash'} · Licencia libre de uso`;
-  cred.style.display='block';
-}
-
-function onFileSelect(input){
-  const file = input.files[0];
-  if(!file) return;
-  if(file.size > 4*1024*1024){ alert('La imagen es muy grande. Usa una de menos de 4MB.'); return; }
-  const reader = new FileReader();
-  reader.onload = e => {
-    setImgPreview(e.target.result, e.target.result, 'Foto propia', '');
+function onFile(input){
+  const file=input.files[0];if(!file)return;
+  if(file.size>4*1024*1024){alert('Imagen demasiado grande. Usa una menor a 4MB.');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('p-img-url').value=e.target.result;
+    document.getElementById('p-img-small').value=e.target.result;
+    const prev=document.getElementById('img-prev');
+    prev.src=e.target.result;prev.style.display='block';
+    document.getElementById('img-ph').style.display='none';
   };
   reader.readAsDataURL(file);
 }
 
-// ── IA completa la nota desde el titular ──
-async function completarConIA(){
-  const tit = document.getElementById('p-tit').value.trim();
-  const sec = document.getElementById('p-sec').value;
-  if(!tit){ alert('Escribe primero el titular para que la IA pueda completar la nota.'); return; }
-  const btn = document.getElementById('btn-comp');
-  btn.disabled=true; btn.textContent='…';
-  try{
-    const d = await api('/api/admin/completar','POST',{titulo:tit, seccion:sec});
-    if(d.ok && d.articulo){
-      const a = d.articulo;
-      if(a.resumen) document.getElementById('p-res').value  = a.resumen;
-      if(a.cuerpo)  document.getElementById('p-body').value = a.cuerpo.replace(/\\n/g,'\n');
-      if(a.imgQuery){ document.getElementById('p-img-q').value = a.imgQuery; }
-      if(a.imgSugerida){
-        setImgPreview(a.imgSugerida.url, a.imgSugerida.small||a.imgSugerida.url, a.imgSugerida.photographer, a.imgSugerida.photographer_url);
-      }
-      // Si es IA, marcar TestigoMX como autor
-      document.querySelector('input[name="at"][value="ai"]').checked = true;
-      toggleAt({value:'ai'});
-      const msg = document.getElementById('pmsg');
-      msg.className='msg info'; msg.textContent='✦ IA completó la nota — revisa el contenido y publica cuando estés listo.';
-    }else{
-      alert('No se pudo completar: '+(d.error||'error desconocido'));
-    }
-  }catch(e){ alert('Error al conectar con el Worker: '+e.message); }
-  btn.disabled=false; btn.textContent='✦ IA';
+function limpiar(){
+  ['p-tit','p-res','p-body','p-autor','p-cargo','p-img-url-in','p-img-url','p-img-small'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('img-prev').style.display='none';
+  document.getElementById('img-ph').style.display='block';
+  document.getElementById('pmsg').style.display='none';
+  document.getElementById('p-hora').value='';
+  setTipo('principal');
 }
 
-// ── PUBLICAR ──
+// PUBLICAR
 async function publicar(){
-  const tit   = document.getElementById('p-tit').value.trim();
-  const res   = document.getElementById('p-res').value.trim();
-  const bod   = document.getElementById('p-body').value.trim();
-  const sec   = document.getElementById('p-sec').value;
-  const esIA  = document.querySelector('input[name="at"]:checked').value === 'ai';
-  const autor = esIA ? 'TestigoMX' : (document.getElementById('p-autor').value.trim() || 'Redacción');
-  const cargo = document.getElementById('p-cargo').value.trim();
-  const imgQ  = document.getElementById('p-img-q').value.trim();
-  const imgUrl= document.getElementById('p-img-url').value.trim();
-  const imgSm = document.getElementById('p-img-small').value.trim();
-  const imgPh = document.getElementById('p-img-ph').value.trim();
-  const imgPhU= document.getElementById('p-img-ph-url').value.trim();
-  const msg   = document.getElementById('pmsg');
+  const tit=document.getElementById('p-tit').value.trim();
+  const res=document.getElementById('p-res').value.trim();
+  const bod=document.getElementById('p-body').value.trim();
+  const sec=document.getElementById('p-sec').value;
+  const autor=document.getElementById('p-autor').value.trim()||'Redacción Testigo';
+  const cargo=document.getElementById('p-cargo').value.trim();
+  const imgUrl=document.getElementById('p-img-url').value.trim();
+  const imgSmall=document.getElementById('p-img-small').value.trim();
+  const fecha=document.getElementById('p-fecha').value;
+  const hora=document.getElementById('p-hora').value;
+  const esPrincipal=tipoNota==='principal';
+  const msg=document.getElementById('pmsg');
 
-  if(!tit){ msg.className='msg err'; msg.textContent='⚠ El titular es obligatorio.'; return; }
-  if(!res){ msg.className='msg err'; msg.textContent='⚠ El resumen es obligatorio.'; return; }
-  if(!bod){ msg.className='msg err'; msg.textContent='⚠ El cuerpo es obligatorio.'; return; }
+  if(!tit){msg.className='msg err';msg.textContent='⚠ El titular es obligatorio.';return;}
+  if(!bod){msg.className='msg err';msg.textContent='⚠ El cuerpo es obligatorio.';return;}
 
+  // Programada
+  if(fecha&&hora){
+    const prog={tit,res,bod,sec,autor,cargo,imgUrl,imgSmall,esPrincipal,fecha,hora};
+    saveProg(prog);
+    msg.className='msg ok';msg.textContent=`🕐 Programada para el ${fecha} a las ${hora} CDM`;
+    limpiar();loadProg();return;
+  }
+
+  // Publicar ahora
+  const btn=document.getElementById('btn-pub');
+  btn.disabled=true;btn.textContent='Publicando…';
   try{
-    const d = await api('/api/admin/publicar','POST',{
-      titulo:tit, resumen:res, cuerpo:bod, categoria:sec,
-      autor, cargo, esIA,
-      imgQuery:imgQ||tit,
-      imgUrl, imgSmall:imgSm,
-      imgPhotographer:imgPh, imgPhotographerUrl:imgPhU
-    });
+    const d=await api('/api/admin/publicar','POST',{titulo:tit,resumen:res,cuerpo:bod,categoria:sec,autor,cargo,esPrincipal,imgUrl,imgSmall});
     if(d.ok){
-      msg.className='msg ok';
-      msg.textContent=`✓ Publicado correctamente — ${f12(mxNow())} CDM · Ya es visible en el sitio`;
-      limpiarForm();
-      loadDash();
-    }else{
-      msg.className='msg err'; msg.textContent='Error: '+(d.error||'desconocido');
-    }
-  }catch(e){
-    msg.className='msg err'; msg.textContent='Error de conexión: '+e.message;
-  }
-  setTimeout(()=>{ msg.style.display='none'; }, 8000);
+      msg.className='msg ok';msg.textContent=`✓ Publicado — ${f12(mxNow())} CDM · Ya visible en el sitio`;
+      limpiar();loadDash();
+    }else{msg.className='msg err';msg.textContent='Error: '+(d.error||'desconocido');}
+  }catch(e){msg.className='msg err';msg.textContent='Error: '+e.message;}
+  btn.disabled=false;btn.textContent='📤 Publicar';
+  setTimeout(()=>{msg.style.display='none';},9000);
 }
 
-// ═══ REGISTRO ═══
-async function loadReg(){
-  const f = document.getElementById('reg-f').value;
-  try{
-    const d = await api('/api/admin/lista?limit=200');
-    let arts = d.articulos || [];
-    if(f) arts = arts.filter(a => a.categoria === f);
-    document.getElementById('reg-n').textContent = arts.length;
-    const tb = document.getElementById('reg-body');
-    if(!arts.length){
-      tb.innerHTML = '<tr><td colspan="6" class="erow">Sin publicaciones en esta sección.</td></tr>';
-      return;
-    }
-    tb.innerHTML = arts.map(a=>`
-      <tr>
-        <td style="color:var(--gray);font-size:11px">#${a.id}</td>
-        <td style="white-space:nowrap;font-size:11px">
-          <strong>${rel(a.timestamp)}</strong><br>
-          <span style="color:var(--gray);font-size:10px">${exact(a.timestamp)}</span>
-        </td>
-        <td style="max-width:220px;font-size:12px;font-weight:600;word-break:break-word">${a.titulo}</td>
-        <td><span class="cb">${a.categoria}</span></td>
-        <td>${a.es_ia ? '<span class="ab">TestigoMX</span>' : `<span style="font-size:12px">${a.autor||'Redacción'}</span>`}</td>
-        <td>
-          <div style="display:flex;gap:5px">
-            <button class="tb" onclick="abrirEdit(${a.id})">Editar</button>
-            <button class="tb del" onclick="eliminar(${a.id})">✕</button>
-          </div>
-        </td>
-      </tr>`).join('');
-  }catch(e){
-    document.getElementById('reg-body').innerHTML=`<tr><td colspan="6" style="color:red;padding:14px">Error: ${e.message}</td></tr>`;
-  }
-}
+// PROGRAMADAS
+function getProg(){try{return JSON.parse(localStorage.getItem('tg_prog')||'[]');}catch{return[];}}
+function saveProg(p){const l=getProg();l.push(p);localStorage.setItem('tg_prog',JSON.stringify(l));loadProg();}
+function delProg(i){const l=getProg();l.splice(i,1);localStorage.setItem('tg_prog',JSON.stringify(l));loadProg();}
 
-async function eliminar(id){
-  if(!confirm(`¿Eliminar publicación #${id}?\n\nEsta acción no se puede deshacer.`)) return;
-  try{
-    const d = await api(`/api/admin/eliminar?id=${id}`,'DELETE');
-    if(d.ok){ loadReg(); loadDash(); }
-    else alert('Error al eliminar: '+d.error);
-  }catch(e){ alert('Error: '+e.message); }
-}
-
-// ═══ MODAL EDITAR ═══
-async function abrirEdit(id){
-  try{
-    const d = await fetch(`${WU}/api/noticia?id=${id}`).then(r=>r.json());
-    if(!d.articulo){ alert('No se encontró el artículo #'+id); return; }
-    const a = d.articulo;
-    document.getElementById('e-id').value    = a.id;
-    document.getElementById('e-tit').value   = a.titulo  || '';
-    document.getElementById('e-res').value   = a.resumen || '';
-    document.getElementById('e-body').value  = (a.cuerpo||'').replace(/\\n/g,'\n');
-    document.getElementById('e-sec').value   = a.categoria || 'Nacional';
-    document.getElementById('e-autor').value = a.es_ia ? 'TestigoMX' : (a.autor||'');
-    document.getElementById('e-img-q').value = a.img_query || '';
-    document.getElementById('edit-msg').style.display='none';
-    document.getElementById('edit-modal').classList.add('open');
-  }catch(e){ alert('Error al cargar el artículo: '+e.message); }
-}
-
-function closeModal(){
-  document.getElementById('edit-modal').classList.remove('open');
-}
-
-async function guardarEdit(){
-  const id = document.getElementById('e-id').value;
-  const b  = {
-    id,
-    titulo:   document.getElementById('e-tit').value,
-    resumen:  document.getElementById('e-res').value,
-    cuerpo:   document.getElementById('e-body').value,
-    categoria:document.getElementById('e-sec').value,
-    autor:    document.getElementById('e-autor').value,
-    cargo:    '',
-    imgQuery: document.getElementById('e-img-q').value,
-  };
-  const msg = document.getElementById('edit-msg');
-  try{
-    const d = await api('/api/admin/editar','PUT',b);
-    if(d.ok){
-      msg.className='msg ok'; msg.textContent='✓ Guardado correctamente';
-      setTimeout(()=>{ closeModal(); loadReg(); loadDash(); }, 1200);
-    }else{
-      msg.className='msg err'; msg.textContent='Error: '+d.error;
-    }
-  }catch(e){
-    msg.className='msg err'; msg.textContent='Error: '+e.message;
-  }
-}
-
-// ═══ IA — VISTA PREVIA ═══
-let _prevs = [];
-let _prevSec = 'Nacional';
-
-async function previewIA(){
-  const sec  = document.getElementById('ia-sec-p').value;
-  const cant = parseInt(document.getElementById('ia-cant-p').value);
-  const btn  = document.getElementById('btn-prev');
-  const msg  = document.getElementById('ia-prev-msg');
-  const cont = document.getElementById('ia-prevs');
-  btn.disabled=true; btn.textContent='Generando…';
-  cont.innerHTML='<div style="color:var(--gray);font-style:italic;padding:12px 0;font-size:13px">Generando vista previa con IA…</div>';
-
-  try{
-    const d = await api('/api/admin/preview-ia','POST',{seccion:sec, cantidad:cant});
-    if(d.ok && d.articulos && d.articulos.length){
-      _prevs = d.articulos; _prevSec = sec;
-      cont.innerHTML = d.articulos.map((a,i)=>`
-        <div class="prev-art">
-          <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:5px">${sec} · Vista previa #${i+1}</div>
-          ${a.imgSugerida?`<img src="${a.imgSugerida.url}" class="prev-img" onerror="this.style.display='none'"/>`:''}
-          <div class="prev-tit">${a.titulo}</div>
-          <div class="prev-res">${a.resumen}</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-red" onclick="pubPreview(${i})" style="font-size:10px;padding:6px 12px">📤 Publicar esta</button>
-            <button class="btn btn-gray" onclick="editarPreview(${i})" style="font-size:10px;padding:6px 12px">✏ Editar antes</button>
-            <button class="btn-ol" onclick="descartarPreview(${i})" style="font-size:10px;padding:5px 10px">✕ Descartar</button>
-          </div>
-        </div>`).join('');
-      msg.className='msg info'; msg.textContent=`${d.articulos.length} artículo(s) generado(s) — revisa y publica los que quieras.`;
-    }else{
-      cont.innerHTML='';
-      msg.className='msg err'; msg.textContent='Error: '+(d.error||'no se generó contenido');
-    }
-  }catch(e){
-    cont.innerHTML='';
-    msg.className='msg err'; msg.textContent='Error de conexión: '+e.message;
-  }
-  btn.disabled=false; btn.textContent='✦ Generar vista previa';
-}
-
-async function pubPreview(i){
-  const a = _prevs[i];
-  if(!a) return;
-  try{
-    const d = await api('/api/admin/publicar','POST',{
-      titulo:a.titulo, resumen:a.resumen, cuerpo:a.cuerpo,
-      categoria:_prevSec, autor:'TestigoMX', esIA:true,
-      imgQuery: a.imgQuery||'',
-      imgUrl:   a.imgSugerida?.url||'',
-      imgSmall: a.imgSugerida?.small||'',
-      imgPhotographer:    a.imgSugerida?.photographer||'',
-      imgPhotographerUrl: a.imgSugerida?.photographer_url||''
-    });
-    const msg = document.getElementById('ia-prev-msg');
-    if(d.ok){
-      msg.className='msg ok'; msg.textContent=`✓ Artículo #${i+1} publicado en el sitio.`;
-      loadDash();
-    }else{ msg.className='msg err'; msg.textContent='Error: '+d.error; }
-  }catch(e){ alert('Error: '+e.message); }
-}
-
-function editarPreview(i){
-  const a = _prevs[i];
-  if(!a) return;
-  // Pasar al form de publicar con los datos prellenados
-  sp('publicar');
-  document.getElementById('p-tit').value  = a.titulo||'';
-  document.getElementById('p-res').value  = a.resumen||'';
-  document.getElementById('p-body').value = (a.cuerpo||'').replace(/\\n/g,'\n');
-  document.getElementById('p-sec').value  = _prevSec;
-  document.getElementById('p-img-q').value= a.imgQuery||'';
-  if(a.imgSugerida){
-    setImgPreview(a.imgSugerida.url,a.imgSugerida.small||a.imgSugerida.url,a.imgSugerida.photographer,a.imgSugerida.photographer_url);
-  }
-  document.querySelector('input[name="at"][value="ai"]').checked=true;
-  toggleAt({value:'ai'});
-}
-
-function descartarPreview(i){
-  if(i >= 0 && i < _prevs.length) _prevs.splice(i,1);
-  const msg = document.getElementById('ia-prev-msg');
-  msg.className='msg info'; msg.textContent='Artículo descartado.';
-  setTimeout(()=>{ msg.style.display='none'; }, 3000);
-  // Quitar del DOM
-  const cont = document.getElementById('ia-prevs');
-  const cards = cont.querySelectorAll('.prev-art');
-  if(cards[i]) cards[i].remove();
-}
-
-// ═══ IA — GENERAR DIRECTO ═══
-async function genDirecto(){
-  const sec  = document.getElementById('ia-sec').value;
-  const cant = parseInt(document.getElementById('ia-cant').value);
-  const btn  = document.getElementById('btn-gen');
-  const msg  = document.getElementById('ia-msg');
-  btn.disabled=true; btn.textContent='Generando y publicando…';
-  try{
-    const d = await api('/api/admin/generar','POST',{seccion:sec, cantidad:cant});
-    if(d.ok){
-      msg.className='msg ok'; msg.textContent=`✓ ${d.articulos?.length||cant} noticias de "${sec}" publicadas en el sitio.`;
-      loadDash();
-    }else{
-      msg.className='msg err'; msg.textContent='Error: '+(d.error||'desconocido');
-    }
-  }catch(e){
-    msg.className='msg err'; msg.textContent='Error: '+e.message;
-  }
-  btn.disabled=false; btn.textContent='✦ Generar y publicar';
-  setTimeout(()=>{ msg.style.display='none'; }, 8000);
-}
-
-// ═══ HORARIO ═══
-const SLOTS_DEFAULT = ['07:00','10:00','13:00','16:00','19:00','22:00'];
-const TEMAS_DEFAULT = ['Nacional','Economía','Internacional','Lo que no sale en TV','Política','Deportes'];
-let slotsOn = [...SLOTS_DEFAULT];
-
-async function loadHorario(){
-  try{
-    const d = await api('/api/admin/config');
-    if(d.config){
-      if(d.config.horario_ia)     slotsOn = d.config.horario_ia.split(',').map(s=>s.trim());
-      if(d.config.temas_ia)       document.getElementById('temas-in').value  = d.config.temas_ia;
-      if(d.config.cantidad_por_slot) document.getElementById('cant-slot').value = d.config.cantidad_por_slot;
-    }
-  }catch(e){ console.warn('loadHorario:', e); }
-  renderSched();
-}
-
-function renderSched(){
-  const sg = document.getElementById('sched-grid');
-  if(!sg) return;
-  const hm = `${String(mxNow().getHours()).padStart(2,'0')}:${String(mxNow().getMinutes()).padStart(2,'0')}`;
-  sg.innerHTML = SLOTS_DEFAULT.map((h,i)=>{
-    const on   = slotsOn.includes(h);
-    const tema = TEMAS_DEFAULT[i] || 'Nacional';
-    const past = h <= hm;
-    return `<div class="ss ${on?'on':''}" onclick="toggleSlot('${h}')">
-      <div class="sh">${h}</div>
-      <div class="st">${tema}</div>
-      <div class="se">${on?'✓ Activo':'Inactivo'}</div>
+function loadProg(){
+  const prog=getProg();
+  document.getElementById('st-pr').textContent=prog.length;
+  const el=document.getElementById('prog-list');if(!el)return;
+  if(!prog.length){el.innerHTML='<div style="color:var(--gray);font-style:italic;font-size:13px">Sin notas programadas.</div>';return;}
+  el.innerHTML=prog.map((p,i)=>{
+    const ts=new Date(`${p.fecha}T${p.hora}:00`);
+    const ahora=mxNow();
+    const pub=ts<=ahora;
+    return`<div class="prog-slot">
+      <div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:3px">${p.sec}</div>
+        <div class="prog-hora">${p.hora}</div>
+        <div style="font-size:10px;color:var(--gray)">${p.fecha}</div>
+      </div>
+      <div style="flex:1">
+        <div class="prog-tit">${p.tit}</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--gray);margin-top:3px">${p.autor||'Redacción'} · ${p.esPrincipal?'<span style="background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px">PRINCIPAL</span>':'Nota normal'}</div>
+        ${pub?'<div style="font-family:\'DM Sans\',sans-serif;font-size:11px;color:var(--green);margin-top:4px;font-weight:700">⏰ Hora llegada — listo para publicar</div>':''}
+      </div>
+      <div style="display:flex;gap:6px;flex-direction:column">
+        <button class="btn btn-red" onclick="pubProg(${i})" style="font-size:10px;padding:6px 10px">📤 Publicar</button>
+        <button class="btn btn-gray" onclick="delProg(${i})" style="font-size:10px;padding:6px 10px">✕ Quitar</button>
+      </div>
     </div>`;
   }).join('');
 }
 
-function toggleSlot(h){
-  if(slotsOn.includes(h)) slotsOn = slotsOn.filter(s=>s!==h);
-  else { slotsOn.push(h); slotsOn.sort(); }
-  renderSched();
-}
-
-async function guardarHorario(){
-  const msg = document.getElementById('sched-msg');
+async function pubProg(i){
+  const prog=getProg();const p=prog[i];if(!p)return;
   try{
-    const d = await api('/api/admin/config','POST',{ horario_ia: slotsOn.join(',') });
-    if(d.ok){ msg.className='msg ok'; msg.textContent='✓ Horario guardado correctamente'; }
-    else{     msg.className='msg err'; msg.textContent='Error: '+d.error; }
-  }catch(e){ msg.className='msg err'; msg.textContent='Error: '+e.message; }
-  setTimeout(()=>{ msg.style.display='none'; }, 4000);
+    const d=await api('/api/admin/publicar','POST',{titulo:p.tit,resumen:p.res||'',cuerpo:p.bod,categoria:p.sec,autor:p.autor||'Redacción Testigo',cargo:p.cargo||'',esPrincipal:p.esPrincipal,imgUrl:p.imgUrl||'',imgSmall:p.imgSmall||''});
+    if(d.ok){delProg(i);loadDash();alert('✓ Publicado correctamente.');}
+    else alert('Error: '+d.error);
+  }catch(e){alert('Error: '+e.message);}
 }
 
-async function guardarTemas(){
-  const t = document.getElementById('temas-in').value.trim();
-  const c = document.getElementById('cant-slot').value;
-  const msg = document.getElementById('temas-msg');
+// Auto-publicar cuando llega la hora
+function startAutoPublish(){
+  setInterval(async()=>{
+    const prog=getProg();if(!prog.length)return;
+    let cambios=false;
+    for(let i=prog.length-1;i>=0;i--){
+      const p=prog[i];
+      const ts=new Date(`${p.fecha}T${p.hora}:00`);
+      if(ts<=mxNow()){
+        try{
+          const d=await api('/api/admin/publicar','POST',{titulo:p.tit,resumen:p.res||'',cuerpo:p.bod,categoria:p.sec,autor:p.autor||'Redacción Testigo',cargo:p.cargo||'',esPrincipal:p.esPrincipal,imgUrl:p.imgUrl||'',imgSmall:p.imgSmall||''});
+          if(d.ok){prog.splice(i,1);cambios=true;}
+        }catch(e){console.warn('autopub:',e);}
+      }
+    }
+    if(cambios){localStorage.setItem('tg_prog',JSON.stringify(prog));loadProg();loadDash();}
+  },30000);
+}
+
+// REGISTRO
+async function loadReg(){
+  const f=document.getElementById('reg-f').value;
   try{
-    const d = await api('/api/admin/config','POST',{ temas_ia: t, cantidad_por_slot: c });
-    if(d.ok){ msg.className='msg ok'; msg.textContent='✓ Guardado correctamente'; }
-    else{     msg.className='msg err'; msg.textContent='Error: '+d.error; }
-  }catch(e){ msg.className='msg err'; msg.textContent='Error: '+e.message; }
-  setTimeout(()=>{ msg.style.display='none'; }, 4000);
+    const d=await api('/api/admin/lista?limit=200');
+    let arts=d.articulos||[];
+    if(f)arts=arts.filter(a=>a.categoria===f);
+    document.getElementById('reg-n').textContent=arts.length;
+    const tb=document.getElementById('reg-tb');
+    if(!arts.length){tb.innerHTML='<tr><td colspan="7" class="erow">Sin publicaciones.</td></tr>';return;}
+    tb.innerHTML=arts.map(a=>`
+      <tr>
+        <td style="color:var(--gray);font-size:11px">#${a.id}</td>
+        <td style="white-space:nowrap;font-size:11px"><strong>${rel(a.timestamp)}</strong><br><span style="color:var(--gray);font-size:10px">${exact(a.timestamp)}</span></td>
+        <td style="max-width:200px;font-size:12px;font-weight:600;word-break:break-word">${a.titulo}</td>
+        <td><span class="cb">${a.categoria}</span></td>
+        <td style="font-size:12px">${a.autor||'Redacción'}</td>
+        <td>${a.es_principal?'<span style="background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px">PRINCIPAL</span>':'<span style="font-size:11px;color:var(--gray)">Normal</span>'}</td>
+        <td><div style="display:flex;gap:5px">
+          <button class="tbb" onclick="abrirEdit(${a.id})">Editar</button>
+          <button class="tbb del" onclick="eliminar(${a.id})">✕</button>
+        </div></td>
+      </tr>`).join('');
+  }catch(e){document.getElementById('reg-tb').innerHTML=`<tr><td colspan="7" style="color:red;padding:12px">Error: ${e.message}</td></tr>`;}
 }
 
-// ═══ SISTEMA ═══
+async function eliminar(id){
+  if(!confirm(`¿Eliminar nota #${id}?`))return;
+  try{
+    const d=await api(`/api/admin/eliminar?id=${id}`,'DELETE');
+    if(d.ok){loadReg();loadDash();}
+    else alert('Error: '+d.error);
+  }catch(e){alert('Error: '+e.message);}
+}
+
+// MODAL EDITAR
+async function abrirEdit(id){
+  try{
+    const d=await fetch(`${WU}/api/noticia?id=${id}`).then(r=>r.json());
+    if(!d.articulo){alert('No encontrado');return;}
+    const a=d.articulo;
+    document.getElementById('e-id').value=a.id;
+    document.getElementById('e-tit').value=a.titulo||'';
+    document.getElementById('e-res').value=a.resumen||'';
+    document.getElementById('e-body').value=(a.cuerpo||'').replace(/\\n/g,'\n');
+    document.getElementById('e-sec').value=a.categoria||'Nacional';
+    document.getElementById('e-autor').value=a.autor||'';
+    document.getElementById('e-principal').checked=!!a.es_principal;
+    document.getElementById('edit-msg').style.display='none';
+    document.getElementById('edit-modal').classList.add('open');
+  }catch(e){alert('Error: '+e.message);}
+}
+function closeModal(){document.getElementById('edit-modal').classList.remove('open');}
+async function guardarEdit(){
+  const id=document.getElementById('e-id').value;
+  const b={id,titulo:document.getElementById('e-tit').value,resumen:document.getElementById('e-res').value,cuerpo:document.getElementById('e-body').value,categoria:document.getElementById('e-sec').value,autor:document.getElementById('e-autor').value,cargo:'',esPrincipal:document.getElementById('e-principal').checked};
+  const msg=document.getElementById('edit-msg');
+  try{
+    const d=await api('/api/admin/editar','PUT',b);
+    if(d.ok){msg.className='msg ok';msg.textContent='✓ Guardado';setTimeout(()=>{closeModal();loadReg();loadDash();},1200);}
+    else{msg.className='msg err';msg.textContent='Error: '+d.error;}
+  }catch(e){msg.className='msg err';msg.textContent='Error: '+e.message;}
+}
+
+// SISTEMA
 async function initDB(){
-  const msg = document.getElementById('cfg-msg');
-  msg.className='msg info'; msg.textContent='Inicializando base de datos…';
+  const msg=document.getElementById('cfg-msg');
+  msg.className='msg info';msg.textContent='Inicializando…';
   try{
-    const d = await fetch(WU+'/api/init',{method:'POST'}).then(r=>r.json());
-    if(d.ok){ msg.className='msg ok'; msg.textContent='✓ '+d.msg; }
-    else{     msg.className='msg err'; msg.textContent='Error: '+d.error; }
-  }catch(e){ msg.className='msg err'; msg.textContent='Error: '+e.message; }
+    const d=await fetch(WU+'/api/init',{method:'POST'}).then(r=>r.json());
+    if(d.ok){msg.className='msg ok';msg.textContent='✓ '+d.msg;}
+    else{msg.className='msg err';msg.textContent='Error: '+d.error;}
+  }catch(e){msg.className='msg err';msg.textContent='Error: '+e.message;}
 }
 </script>
 </body>
