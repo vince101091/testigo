@@ -258,7 +258,7 @@ footer{background:var(--ink);color:var(--lg);padding:32px 0 14px;margin-top:36px
   <div class="tbr">
     <a class="tba" onclick="go('portada')">Inicio</a>
     <span class="dot">·</span>
-    <a class="tba" href="mailto:contacto@testigo.mx">Contacto</a>
+    <a class="tba" href="/cdn-cgi/l/email-protection#ea8985849e8b899e85aa9e8f999e838d85c48792">Contacto</a>
   </div>
 </div>
 
@@ -474,7 +474,7 @@ footer{background:var(--ink);color:var(--lg);padding:32px 0 14px;margin-top:36px
         <a href="#">Correcciones</a><a href="#">Aviso de privacidad</a>
       </div>
       <div class="ftcol"><h4>Contacto</h4>
-        <a href="mailto:contacto@testigo.mx">Redacción</a>
+        <a href="/cdn-cgi/l/email-protection#3f5c50514b5e5c4b507f4b5a4c4b565850115247">Redacción</a>
         <a onclick="go('colonia')">¿Fuiste testigo?</a>
         <a href="#">Redes sociales</a>
       </div>
@@ -486,7 +486,7 @@ footer{background:var(--ink);color:var(--lg);padding:32px 0 14px;margin-top:36px
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const WU = window.WU || "https://testigo-worker.vinceremx.workers.dev";
 
 // ══ HORA MÉXICO ══
@@ -648,13 +648,12 @@ function openArtObj(a,back){
 
 // ══ PORTADA ══
 async function loadPortada(){
-  // Primero las principales, luego el resto
+  // Traer notas excluyendo Opinión — Opinión solo aparece en su sección
   const principales=await getArts('','5','principal');
   const recientes=await getArts('',20);
-  // Mezclar: principales primero, luego recientes sin duplicar
   const ids=new Set(principales.map(a=>a.id));
-  const resto=recientes.filter(a=>!ids.has(a.id));
-  const all=[...principales,...resto];
+  const all=[...principales,...recientes.filter(a=>!ids.has(a.id))]
+    .filter(a=>a.categoria!=='Opinión'); // Excluir Opinión de portada
   artStore['portada']=all;
 
   if(all.length===0){
@@ -667,18 +666,15 @@ async function loadPortada(){
     document.getElementById('cards-grid').innerHTML=all.slice(3,9).length?all.slice(3,9).map((a,i)=>rCard(a,i+3,'portada')).join(''):emptyState();
   }
 
-  // Columnistas
   renderColsPortada();
 
-  // Contador
   const hoy=mxNow().toDateString();
   const hoyN=all.filter(a=>new Date(a.timestamp).toDateString()===hoy).length;
   document.getElementById('tb-count').textContent=`📰 ${hoyN} noticias hoy`;
 
-  // Ticker
   if(all.length>0){
     const tk=document.getElementById('ticker');
-    const items=[...all.slice(0,6).map(a=>a.titulo)];
+    const items=all.slice(0,6).map(a=>a.titulo);
     tk.innerHTML=[...items,...items].map(s=>`<span>${s}</span>`).join('');
     tk.innerHTML+=tk.innerHTML;
   }
@@ -691,7 +687,6 @@ function labelSec(k){return LBL[k]||'';}
 async function loadSec(key){
   document.getElementById('sec-cards').innerHTML='<div class="loader" style="grid-column:1/-1"><div class="ls"></div></div>';
   const lbl=labelSec(key)||key;
-  // Principales primero, luego el resto
   const principales=await getArts(lbl,5,'principal');
   const recientes=await getArts(lbl,20);
   const ids=new Set(principales.map(a=>a.id));
@@ -726,47 +721,74 @@ async function loadDeportes(){
   if(bx)bx.innerHTML=arts.length?arts.slice(0,3).map((a,i)=>rCard(a,i,'Deportes')).join(''):emptyState();
 }
 
-// ══ COLUMNISTAS ══
-const COLS=[
+// ══ COLUMNISTAS — editables desde admin (guardados en localStorage del sitio) ══
+const COLS_DEFAULT=[
   {nombre:'Remedios Vargas',cargo:'Periodista independiente · 22 años en medios',columna:'La Verdad Sin Anestesia',extracto:'"Cuando un político dice que investiga el caso, en realidad está midiendo cuánto tiempo tiene antes de que te olvides."',img:'https://i.pravatar.cc/150?img=47'},
   {nombre:'Jorge Salcedo',cargo:'Analista político · Ex corresponsal en Washington',columna:'El Termómetro',extracto:'"México no tiene crisis de seguridad. Tiene crisis de impunidad. Son cosas distintas y resolverlas requiere soluciones distintas."',img:'https://i.pravatar.cc/150?img=12'},
   {nombre:'Carmen Leal',cargo:'Corresponsal en regiones · Oaxaca, Guerrero, Chiapas',columna:'Desde Abajo',extracto:'"En el rancho ya saben quién manda de verdad. Lo raro es que en la ciudad sigan fingiendo que no."',img:'https://i.pravatar.cc/150?img=32'},
   {nombre:'Héctor Bernal',cargo:'Economista · Especialista en finanzas populares',columna:'Tu Quincena',extracto:'"La inflación no es un número. Es lo que sientes cuando llegas al super con quinientos pesos y sales con dos bolsas."',img:'https://i.pravatar.cc/150?img=25'},
 ];
+function getCOLS(){
+  try{const s=localStorage.getItem('tg_cols');return s?JSON.parse(s):COLS_DEFAULT;}
+  catch{return COLS_DEFAULT;}
+}
 
 function renderColsPortada(){
-  const el=document.getElementById('col-portada');if(!el)return;
+  const COLS=getCOLS().filter(c=>c.nombre); // Ocultar si está vacío
+  const el=document.getElementById('col-portada');if(!el||!COLS.length)return;
   el.innerHTML=`
     <div class="sh"><h2>Columnistas</h2></div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--lg);margin-bottom:28px">
+    <div style="display:grid;grid-template-columns:repeat(${Math.min(COLS.length,4)},1fr);gap:0;border:1px solid var(--lg);margin-bottom:28px">
       ${COLS.map((c,i)=>`
-        <div style="padding:18px;border-right:1px solid var(--lg);cursor:pointer;transition:background .2s;text-align:center" onclick="openCol(${i})" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background=''">
-          <img src="${c.img}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;border:2px solid var(--lg)" alt="${c.nombre}" onerror="this.src='https://i.pravatar.cc/150?img=${i+8}'"/>
+        <div style="padding:18px;border-right:1px solid var(--lg);cursor:pointer;transition:background .2s;text-align:center;${i===COLS.length-1?'border-right:none':''}" onclick="openCol(${i})" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background=''">
+          ${c.img?`<img src="${c.img}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;border:2px solid var(--lg)" onerror="this.style.display='none'"/>`:''}
           <div style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:2px">${c.nombre}</div>
-          <div style="font-family:'DM Sans',sans-serif;font-size:9px;color:var(--gray);letter-spacing:.05em;text-transform:uppercase;margin-bottom:7px;line-height:1.4">${c.cargo}</div>
-          <div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--red);margin-bottom:5px">"${c.columna}"</div>
-          <div style="font-family:'Source Serif 4',serif;font-style:italic;font-size:12px;line-height:1.42;color:var(--gray)">${c.extracto}</div>
+          ${c.cargo?`<div style="font-family:'DM Sans',sans-serif;font-size:9px;color:var(--gray);letter-spacing:.05em;text-transform:uppercase;margin-bottom:7px;line-height:1.4">${c.cargo}</div>`:''}
+          ${c.columna?`<div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--red);margin-bottom:5px">"${c.columna}"</div>`:''}
+          ${c.extracto?`<div style="font-family:'Source Serif 4',serif;font-style:italic;font-size:12px;line-height:1.42;color:var(--gray)">${c.extracto}</div>`:''}
         </div>`).join('')}
     </div>`;
 }
 
-function renderOpinion(){
+async function renderOpinion(){
+  const COLS=getCOLS().filter(c=>c.nombre);
   const el=document.getElementById('op-grid');if(!el)return;
-  el.innerHTML=COLS.map((c,i)=>`
+
+  // Traer notas de Opinión desde D1
+  const notasOp=await getArts('Opinión',20);
+  artStore['Opinión']=notasOp;
+
+  // Renderizar columnistas fijos primero
+  const colsHtml=COLS.map((c,i)=>`
     <div class="op-card" onclick="openCol(${i})">
       <div class="op-hdr">
-        <img src="${c.img}" class="op-av" alt="${c.nombre}" onerror="this.src='https://i.pravatar.cc/150?img=${i+8}'"/>
-        <div><div class="op-nm">${c.nombre}</div><div class="op-cg">${c.cargo}</div></div>
+        ${c.img?`<img src="${c.img}" class="op-av" onerror="this.style.display='none'"/>`:''}
+        <div><div class="op-nm">${c.nombre}</div>${c.cargo?`<div class="op-cg">${c.cargo}</div>`:''}</div>
       </div>
-      <div class="op-tit">${c.columna}</div>
-      <div class="op-ext">${c.extracto}</div>
+      ${c.columna?`<div class="op-tit">${c.columna}</div>`:''}
+      ${c.extracto?`<div class="op-ext">${c.extracto}</div>`:''}
       <button class="op-btn">Leer columna →</button>
     </div>`).join('');
+
+  // Notas de Opinión desde D1 (las que publicaste desde el admin)
+  const notasHtml=notasOp.map((a,i)=>`
+    <div class="op-card" onclick="openArt(${i},'Opinión')">
+      <div class="op-hdr">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--lg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">✍️</div>
+        <div><div class="op-nm">${a.autor||'Redacción'}</div>${a.cargo?`<div class="op-cg">${a.cargo}</div>`:''}</div>
+      </div>
+      <div class="op-tit">${a.titulo}</div>
+      ${a.resumen?`<div class="op-ext">${a.resumen}</div>`:''}
+      <button class="op-btn">Leer columna →</button>
+    </div>`).join('');
+
+  el.innerHTML=colsHtml+notasHtml||'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray);font-family:\'DM Sans\',sans-serif">Sin columnas publicadas aún.</div>';
 }
 
 function openCol(i){
-  const c=COLS[i];
-  openArtObj({titulo:c.columna,resumen:`Columna de ${c.nombre}. ${c.cargo}.`,cuerpo:`${c.extracto}\n\nEste es el espacio de análisis independiente de ${c.nombre} en Testigo.\n\nPeriodismo sin compromisos, sin anunciantes que presionen, sin línea editorial que doblar. Aquí se dice lo que se ve, aunque duela.`,categoria:'Opinión',autor:c.nombre,cargo:c.cargo,timestamp:mxNow().toISOString()},()=>go('opinion'));
+  const COLS=getCOLS();
+  const c=COLS[i];if(!c)return;
+  openArtObj({titulo:c.columna||c.nombre,resumen:c.cargo||'',cuerpo:c.extracto||'Sin contenido aún.\n\nPublica la columna desde el panel de redacción.',categoria:'Opinión',autor:c.nombre,cargo:c.cargo,timestamp:mxNow().toISOString()},()=>go('opinion'));
 }
 
 // ══ COLONIA ══
@@ -792,13 +814,4 @@ function go(key){
   else if(key==='economia'){showPage('economia');loadEconomia();}
   else if(key==='deportes'){showPage('deportes');loadDeportes();}
   else if(key==='opinion'){showPage('opinion');renderOpinion();}
-  else if(key==='colonia'){showPage('colonia');loadColonia();}
-  else{showPage('section');loadSec(key);}
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-// ══ INIT ══
-loadPortada();
-</script>
-</body>
-</html>
+  else if(key==='colonia'
