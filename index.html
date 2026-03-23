@@ -512,7 +512,7 @@ function exact(ts){return f12(new Date(ts));}
 // ══ MONEDAS via Worker ══
 async function fetchMonedas(){
   try{
-    const d=await fetch(`${WU}/api/monedas`).then(r=>r.json());
+    const d=await fetchTimeout(`${WU}/api/monedas`,6000).then(r=>r.json());
     if(!d.ok)return;
     const g=id=>document.getElementById(id);
     if(d.usd_mxn){
@@ -531,7 +531,10 @@ async function fetchMonedas(){
         g('e-btc-c').className='eco-chg '+(ch>=0?'up':'dn');
       }
     }
-  }catch(e){console.warn('monedas:',e.message);}
+  }catch(e){
+    // Fallo silencioso — no bloquea el sitio
+    console.warn('monedas:',e.message);
+  }
 }
 fetchMonedas();setInterval(fetchMonedas,300000);
 
@@ -569,16 +572,32 @@ function byl(a,s){
 
 // ══ API D1 ══
 const cache={};
+
+// Fetch con timeout de 4 segundos
+async function fetchTimeout(url, ms=4000){
+  const ctrl=new AbortController();
+  const id=setTimeout(()=>ctrl.abort(),ms);
+  try{
+    const r=await fetch(url,{signal:ctrl.signal});
+    clearTimeout(id);
+    return r;
+  }catch(e){
+    clearTimeout(id);
+    throw e;
+  }
+}
+
 async function getArts(cat,limit,tipo){
   const key=`${cat}|${tipo||''}`;
-  if(cache[key])return cache[key];
+  if(cache[key]&&cache[key].length>0)return cache[key];
   try{
     let u=`${WU}/api/noticias?limit=${limit}`;
-    if(cat)u+=`&categoria=${encodeURIComponent(cat)}`;
+    if(cat&&cat!=='portada')u+=`&categoria=${encodeURIComponent(cat)}`;
     if(tipo)u+=`&tipo=${tipo}`;
-    const d=await fetch(u).then(r=>r.json());
+    const r=await fetchTimeout(u,5000);
+    const d=await r.json();
     if(d.ok&&d.articulos&&d.articulos.length>0){
-      if(cat!=='portada')cache[key]=d.articulos;
+      cache[key]=d.articulos;
       return d.articulos;
     }
   }catch(e){console.warn('API:',e.message);}
@@ -648,36 +667,55 @@ function openArtObj(a,back){
 
 // ══ PORTADA ══
 async function loadPortada(){
-  // Traer notas excluyendo Opinión — Opinión solo aparece en su sección
-  const principales=await getArts('','5','principal');
-  const recientes=await getArts('',20);
-  const ids=new Set(principales.map(a=>a.id));
-  const all=[...principales,...recientes.filter(a=>!ids.has(a.id))]
-    .filter(a=>a.categoria!=='Opinión'); // Excluir Opinión de portada
-  artStore['portada']=all;
+  // Mostrar skeleton/loader mientras carga
+  document.getElementById('hero-main').innerHTML='<div class="loader"><div class="ls"></div><div class="lt">Cargando…</div></div>';
+  document.getElementById('hero-side').innerHTML='<div class="loader"><div class="ls"></div></div>';
+  document.getElementById('cards-grid').innerHTML='<div class="loader" style="grid-column:1/-1"><div class="ls"></div><div class="lt">Cargando…</div></div>';
 
-  if(all.length===0){
-    document.getElementById('hero-main').innerHTML=emptyState('Publica tu primera nota desde el panel de redacción.');
+  try{
+    // Una sola llamada al Worker — más eficiente
+    const recientes=await getArts('',20);
+    // Filtrar Opinión de portada
+    const all=recientes.filter(a=>a.categoria!=='Opinión');
+    // Principales primero
+    const prim=all.filter(a=>a.es_principal);
+    const resto=all.filter(a=>!a.es_principal);
+    const sorted=[...prim,...resto];
+    artStore['portada']=sorted;
+
+    if(sorted.length===0){
+      document.getElementById('hero-main').innerHTML=emptyState('Publica tu primera nota desde el panel de redacción en testigo.pages.dev/admin.html');
+      document.getElementById('hero-side').innerHTML='';
+      document.getElementById('cards-grid').innerHTML='';
+    } else {
+      document.getElementById('hero-main').innerHTML=rHero(sorted[0],0,'portada');
+      document.getElementById('hero-side').innerHTML=sorted.length>1?rSide(sorted.slice(1,5),'portada'):'';
+      document.getElementById('cards-grid').innerHTML=sorted.length>3
+        ?sorted.slice(3,9).map((a,i)=>rCard(a,i+3,'portada')).join('')
+        :'';
+    }
+
+    // Contador
+    const hoy=mxNow().toDateString();
+    const hoyN=sorted.filter(a=>new Date(a.timestamp).toDateString()===hoy).length;
+    document.getElementById('tb-count').textContent=`📰 ${hoyN} noticias hoy`;
+
+    // Ticker
+    if(sorted.length>0){
+      const tk=document.getElementById('ticker');
+      const items=sorted.slice(0,6).map(a=>a.titulo);
+      tk.innerHTML=[...items,...items].map(s=>`<span>${s}</span>`).join('');
+      tk.innerHTML+=tk.innerHTML;
+    }
+  }catch(e){
+    console.error('loadPortada:',e);
+    document.getElementById('hero-main').innerHTML=emptyState('Error al cargar. Recarga la página.');
     document.getElementById('hero-side').innerHTML='';
     document.getElementById('cards-grid').innerHTML='';
-  } else {
-    document.getElementById('hero-main').innerHTML=rHero(all[0],0,'portada');
-    document.getElementById('hero-side').innerHTML=rSide(all.slice(1,5),'portada');
-    document.getElementById('cards-grid').innerHTML=all.slice(3,9).length?all.slice(3,9).map((a,i)=>rCard(a,i+3,'portada')).join(''):emptyState();
   }
 
+  // Columnistas — siempre se muestran independientemente del Worker
   renderColsPortada();
-
-  const hoy=mxNow().toDateString();
-  const hoyN=all.filter(a=>new Date(a.timestamp).toDateString()===hoy).length;
-  document.getElementById('tb-count').textContent=`📰 ${hoyN} noticias hoy`;
-
-  if(all.length>0){
-    const tk=document.getElementById('ticker');
-    const items=all.slice(0,6).map(a=>a.titulo);
-    tk.innerHTML=[...items,...items].map(s=>`<span>${s}</span>`).join('');
-    tk.innerHTML+=tk.innerHTML;
-  }
 }
 
 // ══ SECCIÓN ══
@@ -685,16 +723,19 @@ const LBL={portada:'',nacional:'Nacional',internacional:'Internacional',politica
 function labelSec(k){return LBL[k]||'';}
 
 async function loadSec(key){
-  document.getElementById('sec-cards').innerHTML='<div class="loader" style="grid-column:1/-1"><div class="ls"></div></div>';
+  document.getElementById('sec-cards').innerHTML='<div class="loader" style="grid-column:1/-1"><div class="ls"></div><div class="lt">Cargando…</div></div>';
   const lbl=labelSec(key)||key;
-  const principales=await getArts(lbl,5,'principal');
-  const recientes=await getArts(lbl,20);
-  const ids=new Set(principales.map(a=>a.id));
-  const all=[...principales,...recientes.filter(a=>!ids.has(a.id))];
-  artStore[lbl]=all;
-  const ch=lbl.split('');const last=ch.pop();
-  document.getElementById('sec-title').innerHTML=ch.join('')+`<em>${last}</em>`;
-  document.getElementById('sec-cards').innerHTML=all.length?all.map((a,i)=>rCard(a,i,lbl)).join(''):emptyState();
+  try{
+    const arts=await getArts(lbl,20);
+    // Principales primero
+    const sorted=[...arts.filter(a=>a.es_principal),...arts.filter(a=>!a.es_principal)];
+    artStore[lbl]=sorted;
+    const ch=lbl.split('');const last=ch.pop();
+    document.getElementById('sec-title').innerHTML=ch.join('')+`<em>${last}</em>`;
+    document.getElementById('sec-cards').innerHTML=sorted.length?sorted.map((a,i)=>rCard(a,i,lbl)).join(''):emptyState();
+  }catch(e){
+    document.getElementById('sec-cards').innerHTML=emptyState('Error al cargar. Recarga la página.');
+  }
 }
 
 // ══ ECONOMÍA ══
