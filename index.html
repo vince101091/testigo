@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- TESTIGO v10 build:20260322-2230 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
@@ -299,13 +300,13 @@ footer{background:var(--ink);color:var(--lg);padding:32px 0 14px;margin-top:36px
   <div class="container">
     <section class="hero-section">
       <div class="hero-grid">
-        <article class="hmain" id="hero-main"><div class="loader"><div class="ls"></div><div class="lt">Cargando…</div></div></article>
+        <article class="hmain" id="hero-main"><div style="padding:40px 0;text-align:center;color:var(--gray);font-family:'DM Sans',sans-serif;font-size:13px">Cargando noticias…</div></article>
         <div class="hdiv"></div>
-        <aside class="hside" id="hero-side"><div class="loader"><div class="ls"></div></div></aside>
+        <aside class="hside" id="hero-side"></aside>
       </div>
     </section>
     <div class="sh"><h2>Últimas Noticias</h2></div>
-    <div class="cg" id="cards-grid"><div class="loader" style="grid-column:1/-1"><div class="ls"></div><div class="lt">Cargando…</div></div></div>
+    <div class="cg" id="cards-grid"></div>
     <div class="sh"><h2>Columnistas</h2></div>
     <div id="col-portada"></div>
   </div>
@@ -316,7 +317,7 @@ footer{background:var(--ink);color:var(--lg);padding:32px 0 14px;margin-top:36px
   <div class="container">
     <div class="secpg">
       <h1 class="sectit" id="sec-title">Sección</h1>
-      <div class="seccards" id="sec-cards"><div class="loader" style="grid-column:1/-1"><div class="ls"></div></div></div>
+      <div class="seccards" id="sec-cards"></div>
     </div>
   </div>
 </div>
@@ -337,7 +338,7 @@ footer{background:var(--ink);color:var(--lg);padding:32px 0 14px;margin-top:36px
         </div>
         <div style="font-family:'DM Sans',sans-serif;font-size:10px;color:#555;margin-top:8px">Fuente: ExchangeRate-API · CoinGecko · Datos orientativos</div>
       </div>
-      <div class="seccards" id="eco-cards"><div class="loader" style="grid-column:1/-1"><div class="ls"></div></div></div>
+      <div class="seccards" id="eco-cards"></div>
     </div>
   </div>
 </div>
@@ -404,10 +405,10 @@ footer{background:var(--ink);color:var(--lg);padding:32px 0 14px;margin-top:36px
       </div>
       <div class="dep-content" id="dep-boxeo">
         <div class="sh"><h2>Boxeo mexicano</h2></div>
-        <div class="seccards" id="dep-box-cards"><div class="loader" style="grid-column:1/-1"><div class="ls"></div></div></div>
+        <div class="seccards" id="dep-box-cards"></div>
       </div>
       <div class="sh"><h2>Noticias deportivas</h2></div>
-      <div class="seccards" id="dep-cards"><div class="loader" style="grid-column:1/-1"><div class="ls"></div></div></div>
+      <div class="seccards" id="dep-cards"></div>
     </div>
   </div>
 </div>
@@ -446,7 +447,7 @@ footer{background:var(--ink);color:var(--lg);padding:32px 0 14px;margin-top:36px
         <div class="col-ok" id="col-ok">Gracias. Tu testimonio llega directo a nuestra redacción.</div>
       </div>
       <div class="sh"><h2>Noticias de tu región</h2></div>
-      <div class="seccards" id="col-cards"><div class="loader" style="grid-column:1/-1"><div class="ls"></div></div></div>
+      <div class="seccards" id="col-cards"></div>
     </div>
   </div>
 </div>
@@ -537,7 +538,6 @@ async function fetchMonedas(){
   }
 }
 fetchMonedas();setInterval(fetchMonedas,300000);
-
 // ══ BREAKING ══
 setTimeout(()=>{
   const b=document.getElementById('breaking-bar');
@@ -667,55 +667,48 @@ function openArtObj(a,back){
 
 // ══ PORTADA ══
 async function loadPortada(){
-  // Mostrar skeleton/loader mientras carga
-  document.getElementById('hero-main').innerHTML='<div class="loader"><div class="ls"></div><div class="lt">Cargando…</div></div>';
-  document.getElementById('hero-side').innerHTML='<div class="loader"><div class="ls"></div></div>';
-  document.getElementById('cards-grid').innerHTML='<div class="loader" style="grid-column:1/-1"><div class="ls"></div><div class="lt">Cargando…</div></div>';
+  document.getElementById('hero-main').innerHTML='<div style="padding:40px 0;text-align:center;color:var(--gray);font-family:\'DM Sans\',sans-serif;font-size:13px">Cargando noticias…</div>';
+  document.getElementById('hero-side').innerHTML='';
+  document.getElementById('cards-grid').innerHTML='';
+  renderColsPortada(); // Mostrar columnistas inmediatamente sin esperar Worker
 
+  // Timeout duro: si en 3s no hay respuesta, mostrar vacío
+  let arts=[];
   try{
-    // Una sola llamada al Worker — más eficiente
-    const recientes=await getArts('',20);
-    // Filtrar Opinión de portada
-    const all=recientes.filter(a=>a.categoria!=='Opinión');
-    // Principales primero
-    const prim=all.filter(a=>a.es_principal);
-    const resto=all.filter(a=>!a.es_principal);
-    const sorted=[...prim,...resto];
-    artStore['portada']=sorted;
-
-    if(sorted.length===0){
-      document.getElementById('hero-main').innerHTML=emptyState('Publica tu primera nota desde el panel de redacción en testigo.pages.dev/admin.html');
-      document.getElementById('hero-side').innerHTML='';
-      document.getElementById('cards-grid').innerHTML='';
-    } else {
-      document.getElementById('hero-main').innerHTML=rHero(sorted[0],0,'portada');
-      document.getElementById('hero-side').innerHTML=sorted.length>1?rSide(sorted.slice(1,5),'portada'):'';
-      document.getElementById('cards-grid').innerHTML=sorted.length>3
-        ?sorted.slice(3,9).map((a,i)=>rCard(a,i+3,'portada')).join('')
-        :'';
+    const p=fetch(`${WU}/api/noticias?limit=20`).then(r=>r.json()).catch(()=>({ok:false}));
+    const timeout=new Promise(res=>setTimeout(()=>res({ok:false,_timeout:true}),3000));
+    const d=await Promise.race([p,timeout]);
+    if(d.ok&&d.articulos&&d.articulos.length>0){
+      arts=d.articulos.filter(a=>a.categoria!=='Opinión');
     }
+  }catch(e){ arts=[]; }
 
-    // Contador
-    const hoy=mxNow().toDateString();
-    const hoyN=sorted.filter(a=>new Date(a.timestamp).toDateString()===hoy).length;
-    document.getElementById('tb-count').textContent=`📰 ${hoyN} noticias hoy`;
+  // Ordenar: principales primero
+  const sorted=[...arts.filter(a=>a.es_principal),...arts.filter(a=>!a.es_principal)];
+  artStore['portada']=sorted;
 
-    // Ticker
-    if(sorted.length>0){
-      const tk=document.getElementById('ticker');
+  if(sorted.length===0){
+    document.getElementById('hero-main').innerHTML=emptyState('Sin noticias aún. Publica desde el <a href="/admin.html" style="color:var(--red)">panel de redacción</a>.');
+    document.getElementById('hero-side').innerHTML='';
+    document.getElementById('cards-grid').innerHTML='';
+  } else {
+    document.getElementById('hero-main').innerHTML=rHero(sorted[0],0,'portada');
+    document.getElementById('hero-side').innerHTML=sorted.length>1?rSide(sorted.slice(1,5),'portada'):'';
+    document.getElementById('cards-grid').innerHTML=sorted.slice(3,9).map((a,i)=>rCard(a,i+3,'portada')).join('');
+  }
+
+  const hoy=mxNow().toDateString();
+  const hoyN=sorted.filter(a=>new Date(a.timestamp).toDateString()===hoy).length;
+  const tc=document.getElementById('tb-count');if(tc)tc.textContent=`📰 ${hoyN} noticias hoy`;
+
+  if(sorted.length>0){
+    const tk=document.getElementById('ticker');
+    if(tk){
       const items=sorted.slice(0,6).map(a=>a.titulo);
       tk.innerHTML=[...items,...items].map(s=>`<span>${s}</span>`).join('');
       tk.innerHTML+=tk.innerHTML;
     }
-  }catch(e){
-    console.error('loadPortada:',e);
-    document.getElementById('hero-main').innerHTML=emptyState('Error al cargar. Recarga la página.');
-    document.getElementById('hero-side').innerHTML='';
-    document.getElementById('cards-grid').innerHTML='';
   }
-
-  // Columnistas — siempre se muestran independientemente del Worker
-  renderColsPortada();
 }
 
 // ══ SECCIÓN ══
@@ -723,19 +716,24 @@ const LBL={portada:'',nacional:'Nacional',internacional:'Internacional',politica
 function labelSec(k){return LBL[k]||'';}
 
 async function loadSec(key){
-  document.getElementById('sec-cards').innerHTML='<div class="loader" style="grid-column:1/-1"><div class="ls"></div><div class="lt">Cargando…</div></div>';
   const lbl=labelSec(key)||key;
+  const el=document.getElementById('sec-cards');
+  if(el)el.innerHTML='<div style="grid-column:1/-1;padding:30px;text-align:center;color:var(--gray);font-family:\'DM Sans\',sans-serif;font-size:13px">Cargando…</div>';
+
+  let arts=[];
   try{
-    const arts=await getArts(lbl,20);
-    // Principales primero
-    const sorted=[...arts.filter(a=>a.es_principal),...arts.filter(a=>!a.es_principal)];
-    artStore[lbl]=sorted;
-    const ch=lbl.split('');const last=ch.pop();
-    document.getElementById('sec-title').innerHTML=ch.join('')+`<em>${last}</em>`;
-    document.getElementById('sec-cards').innerHTML=sorted.length?sorted.map((a,i)=>rCard(a,i,lbl)).join(''):emptyState();
-  }catch(e){
-    document.getElementById('sec-cards').innerHTML=emptyState('Error al cargar. Recarga la página.');
-  }
+    const p=fetch(`${WU}/api/noticias?categoria=${encodeURIComponent(lbl)}&limit=20`).then(r=>r.json()).catch(()=>({ok:false}));
+    const timeout=new Promise(res=>setTimeout(()=>res({ok:false}),3000));
+    const d=await Promise.race([p,timeout]);
+    if(d.ok&&d.articulos&&d.articulos.length>0) arts=d.articulos;
+  }catch(e){}
+
+  const sorted=[...arts.filter(a=>a.es_principal),...arts.filter(a=>!a.es_principal)];
+  artStore[lbl]=sorted;
+  const ch=lbl.split('');const last=ch.pop();
+  const st=document.getElementById('sec-title');
+  if(st)st.innerHTML=ch.join('')+`<em>${last}</em>`;
+  if(el)el.innerHTML=sorted.length?sorted.map((a,i)=>rCard(a,i,lbl)).join(''):emptyState();
 }
 
 // ══ ECONOMÍA ══
@@ -855,4 +853,13 @@ function go(key){
   else if(key==='economia'){showPage('economia');loadEconomia();}
   else if(key==='deportes'){showPage('deportes');loadDeportes();}
   else if(key==='opinion'){showPage('opinion');renderOpinion();}
-  else if(key==='colonia'
+  else if(key==='colonia'){showPage('colonia');loadColonia();}
+  else{showPage('section');loadSec(key);}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══ INIT ══
+loadPortada();
+</script>
+</body>
+</html>
