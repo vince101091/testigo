@@ -350,6 +350,19 @@ tbody tr:hover td{background:#fafafa}
       <div class="panel" id="panel-ajust">
         <div class="ph"><em>Ajustes</em></div>
         <div class="ps">Configuración técnica del sistema</div>
+
+        <!-- EDITOR DE COLUMNISTAS -->
+        <div class="card" style="border-left:3px solid #2980b9;margin-bottom:14px">
+          <div class="cardh" style="color:#2980b9">✍️ Editar columnistas del sitio</div>
+          <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--gray);margin-bottom:14px">Estos columnistas aparecen en la sección Opinión y en la portada. Puedes cambiar el nombre, cargo, título de columna y descripción. Deja el nombre vacío para ocultarlo.</p>
+          <div id="cols-editor"></div>
+          <div class="btns" style="margin-top:14px">
+            <button class="btn btn-red" onclick="guardarCols()">💾 Guardar columnistas</button>
+            <button class="btn btn-gray" onclick="resetCols()">↺ Restaurar originales</button>
+          </div>
+          <div class="msg" id="cols-msg"></div>
+        </div>
+
         <div class="card">
           <div class="cardh">Worker activo</div>
           <div class="fl"><label>URL del Worker</label>
@@ -363,10 +376,10 @@ tbody tr:hover td{background:#fafafa}
         <div class="card" style="margin-top:12px">
           <div class="cardh">Cómo funciona cada tipo de nota</div>
           <div style="font-family:'DM Sans',sans-serif;font-size:13px;color:var(--gray);line-height:2">
-            <div>🗞️ <strong>Nota principal</strong> → aparece en portada destacada (hero) y al inicio de su sección. Siempre las más nuevas primero.</div>
-            <div>✍️ <strong>Columna de opinión</strong> → aparece en Opinión con foto del columnista. También aparece en la sección elegida.</div>
-            <div>📌 <strong>Orden</strong> → primero van las notas principales marcadas, luego las demás por fecha (más nueva primero).</div>
-            <div>🕐 <strong>Programadas</strong> → se guardan aquí en el panel y se publican automáticamente a la hora elegida mientras tengas el admin abierto.</div>
+            <div>🗞️ <strong>Nota principal</strong> → aparece en portada destacada (hero) y al inicio de su sección.</div>
+            <div>✍️ <strong>Columna de opinión</strong> → aparece SOLO en la sección Opinión. No contamina la portada.</div>
+            <div>📌 <strong>Columnistas fijos</strong> → edítalos arriba. Se muestran siempre en Opinión aunque no tengan notas publicadas.</div>
+            <div>🕐 <strong>Programadas</strong> → se publican automáticamente a la hora elegida.</div>
           </div>
         </div>
       </div>
@@ -480,6 +493,7 @@ function sp(id){
   if(id==='dash')loadDash();
   if(id==='reg')loadReg();
   if(id==='prog')loadProg();
+  if(id==='ajust')renderColsEditor();
 }
 
 // DASHBOARD
@@ -757,6 +771,59 @@ async function pubColFija(i){
     }else{msg.className='msg err';msg.textContent='Error: '+d.error;}
   }catch(e){msg.className='msg err';msg.textContent='Error: '+e.message;}
   setTimeout(()=>{msg.style.display='none';},5000);
+}
+
+// EDITOR DE COLUMNISTAS
+const COLS_DEF=[
+  {nombre:'Remedios Vargas',cargo:'Periodista independiente · 22 años en medios',columna:'La Verdad Sin Anestesia',extracto:'"Cuando un político dice que investiga el caso, en realidad está midiendo cuánto tiempo tiene antes de que te olvides."',img:'https://i.pravatar.cc/150?img=47'},
+  {nombre:'Jorge Salcedo',cargo:'Analista político · Ex corresponsal en Washington',columna:'El Termómetro',extracto:'"México no tiene crisis de seguridad. Tiene crisis de impunidad. Son cosas distintas y resolverlas requiere soluciones distintas."',img:'https://i.pravatar.cc/150?img=12'},
+  {nombre:'Carmen Leal',cargo:'Corresponsal en regiones · Oaxaca, Guerrero, Chiapas',columna:'Desde Abajo',extracto:'"En el rancho ya saben quién manda de verdad. Lo raro es que en la ciudad sigan fingiendo que no."',img:'https://i.pravatar.cc/150?img=32'},
+  {nombre:'Héctor Bernal',cargo:'Economista · Especialista en finanzas populares',columna:'Tu Quincena',extracto:'"La inflación no es un número. Es lo que sientes cuando llegas al super con quinientos pesos y sales con dos bolsas."',img:'https://i.pravatar.cc/150?img=25'},
+];
+function getCols(){try{const s=localStorage.getItem('tg_cols');return s?JSON.parse(s):JSON.parse(JSON.stringify(COLS_DEF));}catch{return JSON.parse(JSON.stringify(COLS_DEF));}}
+
+function renderColsEditor(){
+  const cols=getCols();
+  const el=document.getElementById('cols-editor');if(!el)return;
+  el.innerHTML=cols.map((c,i)=>`
+    <div style="background:#fafafa;border:1px solid var(--lg);padding:14px;margin-bottom:10px">
+      <div style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+        Columnista ${i+1}
+        <span style="font-size:10px;color:var(--red);font-weight:400">Deja el nombre vacío para ocultar</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="fl" style="margin-bottom:0"><label>Nombre</label><input type="text" id="col-nm-${i}" value="${c.nombre||''}" placeholder="Nombre del columnista (vacío = ocultar)"/></div>
+        <div class="fl" style="margin-bottom:0"><label>Cargo / Descripción</label><input type="text" id="col-cg-${i}" value="${c.cargo||''}" placeholder="Ej: Analista político · 15 años en medios"/></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="fl" style="margin-bottom:0"><label>Título de la columna</label><input type="text" id="col-tit-${i}" value="${c.columna||''}" placeholder="Ej: La Verdad Sin Anestesia"/></div>
+        <div class="fl" style="margin-bottom:0"><label>URL de foto (opcional)</label><input type="text" id="col-img-${i}" value="${c.img||''}" placeholder="https://... o vacío"/></div>
+      </div>
+      <div class="fl" style="margin-bottom:0"><label>Extracto / Frase de presentación</label><textarea id="col-ext-${i}" rows="2" placeholder="Una frase o párrafo corto que represente al columnista…">${c.extracto||''}</textarea></div>
+    </div>`).join('');
+}
+
+function guardarCols(){
+  const cols=getCols();
+  const nuevos=cols.map((_,i)=>({
+    nombre:document.getElementById(`col-nm-${i}`)?.value.trim()||'',
+    cargo:document.getElementById(`col-cg-${i}`)?.value.trim()||'',
+    columna:document.getElementById(`col-tit-${i}`)?.value.trim()||'',
+    img:document.getElementById(`col-img-${i}`)?.value.trim()||'',
+    extracto:document.getElementById(`col-ext-${i}`)?.value.trim()||'',
+  }));
+  localStorage.setItem('tg_cols',JSON.stringify(nuevos));
+  const msg=document.getElementById('cols-msg');
+  msg.className='msg ok';msg.textContent='✓ Columnistas guardados. Ya se ven en el sitio al recargar la página pública.';
+  setTimeout(()=>{msg.style.display='none';},5000);
+}
+
+function resetCols(){
+  if(!confirm('¿Restaurar los 4 columnistas originales? Se perderán tus cambios.'))return;
+  localStorage.removeItem('tg_cols');
+  renderColsEditor();
+  const msg=document.getElementById('cols-msg');
+  msg.className='msg info';msg.textContent='Restaurados. Guarda para confirmar.';
 }
 
 // SISTEMA
